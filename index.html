@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Elemental — the periodic table, up close</title>
+<style>
+  :root{
+    --paper:#f4ecda;
+    --paper-shade:#e6dbc2;
+    --ink:#221b12;
+    --ink-soft:#5e5442;
+    --accent:#b5502f;
+    --cat-alkali:#e0765a;
+    --cat-alkaline:#dfa14a;
+    --cat-transition:#c9a53b;
+    --cat-post:#6fae7a;
+    --cat-metalloid:#4f9e94;
+    --cat-nonmetal:#4f8fbf;
+    --cat-halogen:#7a7ec9;
+    --cat-noble:#9a6fc9;
+    --cat-lanth:#c96fa8;
+    --cat-actin:#c9536f;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; padding:0; width:100%; height:100%;
+    overflow:hidden; background:#140d08;
+    font-family: Georgia, 'Iowan Old Style', serif;
+  }
+
+  /* ================= DESK ================= */
+  #desk{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    perspective: 2000px;
+    background:
+      /* grain */
+      repeating-linear-gradient(88deg, rgba(0,0,0,0.055) 0 1px, transparent 1px 9px),
+      repeating-linear-gradient(92deg, rgba(255,255,255,0.028) 0 1px, transparent 1px 23px),
+      /* plank seams */
+      repeating-linear-gradient(90deg, transparent 0 258px, rgba(0,0,0,0.30) 258px 262px),
+      /* colour */
+      radial-gradient(ellipse 120% 90% at 32% 12%, #8a6242 0%, #6b4a33 42%, #46301f 78%, #2a1a10 100%);
+  }
+  #vignette{
+    position:absolute; inset:0; pointer-events:none;
+    background: radial-gradient(ellipse 75% 65% at 50% 46%, transparent 30%, rgba(0,0,0,0.30) 68%, rgba(0,0,0,0.72) 100%);
+  }
+  #lamp{
+    position:absolute; inset:0; pointer-events:none;
+    background: radial-gradient(ellipse 48% 40% at 38% 22%, rgba(255,226,175,0.20), transparent 70%);
+    mix-blend-mode: screen;
+  }
+
+  #table-wrap{
+    position:relative;
+    width: min(96vw, 1460px);
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(.7,0,.25,1), filter .75s ease, opacity .75s ease;
+    will-change: transform, filter, opacity;
+  }
+  #table-wrap.receding{
+    filter: blur(9px) brightness(.55);
+    opacity:0;
+  }
+
+  /* paper sheet */
+  #paper{
+    position:relative;
+    background:
+      linear-gradient(112deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 38%),
+      radial-gradient(ellipse at 18% 8%, #fbf5e6 0%, var(--paper) 45%, var(--paper-shade) 100%);
+    padding: clamp(11px,1.5vw,24px) clamp(12px,1.7vw,28px) clamp(14px,1.8vw,24px);
+    border-radius: 2px 3px 2px 3px;
+    transform: rotateX(7deg) rotateZ(-0.7deg);
+    transform-origin: 50% 60%;
+    box-shadow:
+      0 2px 3px rgba(0,0,0,0.35),
+      0 14px 26px rgba(0,0,0,0.42),
+      0 44px 80px rgba(0,0,0,0.55),
+      inset 0 0 90px rgba(150,120,70,0.10);
+  }
+  /* fibre texture + faint fold crease */
+  #paper::before{
+    content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+    background:
+      linear-gradient(90deg, transparent 49.6%, rgba(0,0,0,0.045) 49.9%, rgba(255,255,255,0.35) 50.2%, transparent 50.6%),
+      repeating-linear-gradient(72deg, rgba(0,0,0,0.014) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(160deg, rgba(0,0,0,0.012) 0 1px, transparent 1px 5px);
+    mix-blend-mode: multiply;
+  }
+  /* curled lower-right corner lift */
+  #paper::after{
+    content:""; position:absolute; right:-1px; bottom:-1px;
+    width: 58px; height: 58px; pointer-events:none;
+    background: linear-gradient(315deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.05) 38%, transparent 60%);
+    border-bottom-right-radius: 3px;
+  }
+  /* punched holes */
+  .hole{
+    position:absolute; left: 8px; width: 13px; height:13px; border-radius:50%;
+    background: radial-gradient(circle at 40% 35%, #3b2718, #1d1108);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.35);
+  }
+  .hole.h1{ top: 18%; } .hole.h2{ top: 50%; } .hole.h3{ top: 82%; }
+
+  .pt-head{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+    border-bottom: 1.5px solid var(--ink);
+    padding:0 0 7px 22px; margin-bottom:11px; color:var(--ink);
+  }
+  .pt-head h1{ font-size: clamp(16px,1.6vw,24px); margin:0; font-weight:600; letter-spacing:.2px;}
+  .pt-head p{ margin:2px 0 0; font-size: clamp(9px,.8vw,12.5px); color:var(--ink-soft); font-style:italic;}
+  #search-row{ display:flex; gap:7px; }
+  #search-row input{
+    font-family:Georgia,serif; font-size:clamp(10px,.85vw,13px); padding:5px 9px;
+    border:1px solid var(--ink-soft); border-radius:3px;
+    background:rgba(255,255,255,.55); color:var(--ink); width:clamp(96px,10vw,160px);
+  }
+  #search-row button{
+    font-family:Georgia,serif; font-size:clamp(10px,.85vw,13px); padding:5px 12px;
+    border:1px solid rgba(0,0,0,.4); border-radius:3px;
+    background:var(--accent); color:#fff6ec; cursor:pointer;
+  }
+
+  #pt-grid{
+    display:grid; grid-template-columns: repeat(18, 1fr);
+    gap: clamp(2px,.3vw,5px); margin-left:22px;
+  }
+  .tile,.tile-ph{
+    aspect-ratio:1/1; border-radius:2px; position:relative;
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:3px 4px; font-family:Georgia,serif; color:#1b140c;
+    border:1px solid rgba(0,0,0,.30); overflow:hidden;
+  }
+  .tile{
+    cursor:pointer;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.35), rgba(255,255,255,0) 60%),
+      color-mix(in srgb, var(--cat) 34%, var(--paper));
+    transition: transform .18s cubic-bezier(.3,1.4,.5,1), box-shadow .18s ease, background .18s ease;
+  }
+  .tile:hover,.tile:focus-visible{
+    transform: translateY(-3px) scale(1.12); z-index:6; outline:none;
+    box-shadow: 0 7px 16px rgba(0,0,0,.4);
+    background: linear-gradient(160deg, rgba(255,255,255,.4), rgba(255,255,255,0) 60%),
+                color-mix(in srgb, var(--cat) 58%, var(--paper));
+  }
+  .tile.pulse{ animation: pulse 1s ease 2; }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(181,80,47,.75);}
+    50%{ box-shadow:0 0 0 7px rgba(181,80,47,0);}
+  }
+  .tile .num{ font-size:clamp(6px,.62vw,10px); opacity:.72; line-height:1;}
+  .tile .sym{ font-size:clamp(11px,1.35vw,21px); font-weight:700; line-height:1; text-align:center;}
+  .tile .mass{ font-size:clamp(5.5px,.55vw,9px); opacity:.68; line-height:1; text-align:right;}
+  .tile-ph{
+    background: repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0 4px, transparent 4px 8px);
+    border:1px dashed rgba(0,0,0,.32);
+    align-items:center; justify-content:center;
+    font-size:clamp(6px,.6vw,9px); color:var(--ink-soft);
+  }
+  #legend{
+    display:flex; flex-wrap:wrap; gap:6px 15px; margin:11px 0 0 22px; padding-top:8px;
+    border-top:1px solid rgba(0,0,0,.22); font-size:clamp(8px,.68vw,11px); color:var(--ink-soft);
+  }
+  #legend span{ display:inline-flex; align-items:center; gap:5px;}
+  #legend i{ width:9px; height:9px; border-radius:2px; display:inline-block; border:1px solid rgba(0,0,0,.3);}
+
+  /* ================= PORTAL (zoom transition) ================= */
+  #portal{
+    position:fixed; z-index:60; pointer-events:none;
+    border-radius:2px; display:flex; align-items:center; justify-content:center;
+    font-family:Georgia,serif; font-weight:700; color:#1b140c;
+    opacity:0; will-change: transform, opacity, border-radius;
+  }
+  #portal .glyph{ line-height:1; }
+
+  /* ================= ATOM VIEW ================= */
+  #atom-view{
+    position:fixed; inset:0; z-index:50;
+    background: radial-gradient(ellipse 85% 70% at 50% 42%, #16283f 0%, #0a1420 55%, #03070c 100%);
+    opacity:0; pointer-events:none;
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    transition: opacity .45s ease;
+  }
+  #atom-view.show{ opacity:1; pointer-events:auto; }
+  #atom-view::before{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.05;
+    background-image:
+      linear-gradient(rgba(150,205,255,.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(150,205,255,.5) 1px, transparent 1px);
+    background-size:52px 52px;
+  }
+  #atom-canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none;}
+
+  #close-btn{
+    position:absolute; top:16px; right:16px; z-index:20;
+    width:44px; height:44px; border-radius:50%;
+    background:rgba(255,255,255,.08); border:1px solid rgba(190,220,255,.4);
+    color:#dff0ff; font-size:19px; cursor:pointer; backdrop-filter:blur(5px);
+    transition:background .2s, transform .25s;
+  }
+  #close-btn:hover{ background:rgba(255,255,255,.2); transform:rotate(90deg);}
+
+  #zoom-ctl{
+    position:absolute; top:70px; right:16px; z-index:20;
+    display:flex; flex-direction:column; gap:7px;
+  }
+  #zoom-ctl button{
+    width:44px; height:38px; border-radius:9px;
+    background:rgba(255,255,255,.07); border:1px solid rgba(190,220,255,.3);
+    color:#cfe6ff; font-size:15px; cursor:pointer; backdrop-filter:blur(5px);
+    font-family:inherit;
+  }
+  #zoom-ctl button:active{ background:rgba(255,255,255,.2);}
+  #zoom-ctl button.fit{ font-size:10.5px; letter-spacing:.4px;}
+
+  #shell-label{
+    position:absolute; top:18px; left:16px; z-index:15;
+    font-size:11.5px; color:#8fb3d9; letter-spacing:.3px;
+    background:rgba(8,16,26,.45); padding:7px 11px; border-radius:7px;
+    border:1px solid rgba(150,205,255,.2);
+  }
+
+  #info-panel{
+    position:absolute; left:0; bottom:0; z-index:15;
+    width:min(430px,94vw); margin:16px;
+    padding:16px 19px 15px;
+    background:rgba(7,15,25,.68); border:1px solid rgba(150,205,255,.26);
+    border-radius:12px; backdrop-filter:blur(10px); color:#eaf3ff;
+    transform:translateY(16px); opacity:0;
+    transition: transform .55s cubic-bezier(.2,.9,.3,1) .25s, opacity .55s ease .25s;
+  }
+  #atom-view.show #info-panel{ transform:translateY(0); opacity:1;}
+  #info-top{ display:flex; align-items:center; gap:14px; margin-bottom:6px;}
+  #info-sym{ font-family:Georgia,serif; font-size:42px; font-weight:700; color:#fff; text-shadow:0 0 22px rgba(120,190,255,.6); line-height:1;}
+  #info-name{ font-size:18px; font-weight:600;}
+  #info-cat{ font-size:11.5px; color:#9fc3ec; margin-top:2px;}
+  #info-stats{
+    display:grid; grid-template-columns:1fr 1fr; gap:7px 16px;
+    font-size:12.5px; color:#b9d0e7; margin:9px 0; padding:10px 0;
+    border-top:1px solid rgba(150,205,255,.16); border-bottom:1px solid rgba(150,205,255,.16);
+  }
+  #info-stats b{ display:block; color:#fff; font-weight:600; font-size:14px; margin-top:1px;}
+  #info-desc{ font-size:13.5px; line-height:1.5; color:#dbe9f7; font-family:Georgia,serif;}
+
+  @media (max-width:760px){
+    #table-wrap{ width:99vw;}
+    .tile .num,.tile .mass{ display:none;}
+    .tile .sym{ font-size:clamp(9px,2.4vw,15px);}
+    .hole{ display:none;}
+    .pt-head,#pt-grid,#legend{ margin-left:0; padding-left:0;}
+    #info-panel{ width:96vw; margin:9px; padding:13px 15px;}
+    #info-sym{ font-size:33px;}
+    #info-stats{ font-size:11.5px;}
+    #legend{ gap:4px 10px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    #table-wrap,#atom-view,.tile,#portal{ transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div id="desk">
+  <div id="table-wrap">
+    <div id="paper">
+      <div class="hole h1"></div><div class="hole h2"></div><div class="hole h3"></div>
+      <div class="pt-head">
+        <div>
+          <h1>Elemental</h1>
+          <p>tap any element to look inside the atom</p>
+        </div>
+        <div id="search-row">
+          <input id="search-input" type="text" placeholder="find an element…" autocomplete="off">
+          <button id="search-btn">Go</button>
+        </div>
+      </div>
+      <div id="pt-grid"></div>
+      <div id="legend"></div>
+    </div>
+  </div>
+  <div id="lamp"></div>
+  <div id="vignette"></div>
+</div>
+
+<div id="portal"><span class="glyph"></span></div>
+
+<div id="atom-view">
+  <canvas id="atom-canvas"></canvas>
+  <div id="shell-label"></div>
+  <button id="close-btn" aria-label="Back to the table">✕</button>
+  <div id="zoom-ctl">
+    <button id="zin" aria-label="Zoom in">＋</button>
+    <button id="zout" aria-label="Zoom out">－</button>
+    <button id="zfit" class="fit" aria-label="Fit all shells">FIT</button>
+  </div>
+  <div id="info-panel">
+    <div id="info-top">
+      <div id="info-sym"></div>
+      <div>
+        <div id="info-name"></div>
+        <div id="info-cat"></div>
+      </div>
+    </div>
+    <div id="info-stats"></div>
+    <div id="info-desc"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ===================== DATA ===================== */
+const ELEMENTS = [
+[1,"H","Hydrogen",1.0,[1],1,1,"Hydrogen is the simplest and most abundant element in the universe, fuelling stars through nuclear fusion."],
+[2,"He","Helium",4.0,[2],1,18,"Helium is a light, inert noble gas famous for filling balloons and cooling superconducting magnets."],
+[3,"Li","Lithium",6.9,[2,1],2,1,"Lithium is a soft, lightweight alkali metal at the heart of modern rechargeable batteries."],
+[4,"Be","Beryllium",9.0,[2,2],2,2,"Beryllium is a rigid, lightweight metal used in aerospace parts and X-ray equipment windows."],
+[5,"B","Boron",10.8,[2,3],2,13,"Boron is a metalloid essential to plant growth and used in borosilicate glass and detergents."],
+[6,"C","Carbon",12.0,[2,4],2,14,"Carbon is the backbone of all known life, forming everything from soft graphite to hard diamond."],
+[7,"N","Nitrogen",14.0,[2,5],2,15,"Nitrogen makes up about 78% of Earth's atmosphere and is a key building block of amino acids and DNA."],
+[8,"O","Oxygen",16.0,[2,6],2,16,"Oxygen is essential for respiration in most living things and makes up about 21% of the air we breathe."],
+[9,"F","Fluorine",19.0,[2,7],2,17,"Fluorine is the most reactive and electronegative element, added to toothpaste to help prevent tooth decay."],
+[10,"Ne","Neon",20.2,[2,8],2,18,"Neon is an inert noble gas famous for the vivid red-orange glow it gives electrified signs."],
+[11,"Na","Sodium",23.0,[2,8,1],3,1,"Sodium is a soft, highly reactive alkali metal essential for nerve function and found in table salt."],
+[12,"Mg","Magnesium",24.3,[2,8,2],3,2,"Magnesium is a lightweight structural metal and the central atom in chlorophyll in plants."],
+[13,"Al","Aluminum",27.0,[2,8,3],3,13,"Aluminum is a lightweight, corrosion-resistant metal used everywhere from cans to aircraft."],
+[14,"Si","Silicon",28.1,[2,8,4],3,14,"Silicon is a metalloid that forms the basis of computer chips and most of Earth's crust as silicates."],
+[15,"P","Phosphorus",31.0,[2,8,5],3,15,"Phosphorus is essential to DNA, energy transfer, and bone, and exists in several very different forms."],
+[16,"S","Sulfur",32.1,[2,8,6],3,16,"Sulfur is a bright yellow nonmetal, once called brimstone, used in fertilizers and vulcanized rubber."],
+[17,"Cl","Chlorine",35.5,[2,8,7],3,17,"Chlorine is a reactive halogen gas widely used to disinfect drinking water and swimming pools."],
+[18,"Ar","Argon",39.9,[2,8,8],3,18,"Argon is an inert noble gas used to fill light bulbs and shield molten metal during welding."],
+[19,"K","Potassium",39.1,[2,8,8,1],4,1,"Potassium is a soft alkali metal vital to nerve signaling and muscle function."],
+[20,"Ca","Calcium",40.1,[2,8,8,2],4,2,"Calcium is an alkaline earth metal essential for strong bones and teeth."],
+[21,"Sc","Scandium",45.0,[2,8,9,2],4,3,"Scandium is a rare, silvery transition metal used to strengthen aluminum alloys in sports gear."],
+[22,"Ti","Titanium",47.9,[2,8,10,2],4,4,"Titanium is a strong, lightweight, corrosion-resistant metal used in aircraft, implants, and pigments."],
+[23,"V","Vanadium",50.9,[2,8,11,2],4,5,"Vanadium is a hard transition metal that strengthens steel and can take several oxidation states, including +2, +3, +4 and +5."],
+[24,"Cr","Chromium",52.0,[2,8,13,1],4,6,"Chromium is a hard, shiny metal prized for the corrosion resistance it gives stainless steel and chrome plating."],
+[25,"Mn","Manganese",54.9,[2,8,13,2],4,7,"Manganese is a brittle transition metal essential to steelmaking and to enzymes in living cells."],
+[26,"Fe","Iron",55.8,[2,8,14,2],4,8,"Iron is a magnetic transition metal that forms Earth's core and the basis of steel."],
+[27,"Co","Cobalt",58.9,[2,8,15,2],4,9,"Cobalt is a hard, ferromagnetic metal used in rechargeable batteries and vivid blue pigments."],
+[28,"Ni","Nickel",58.7,[2,8,16,2],4,10,"Nickel is a corrosion-resistant metal used in coins, stainless steel, and rechargeable batteries."],
+[29,"Cu","Copper",63.5,[2,8,18,1],4,11,"Copper is an outstanding conductor of electricity, giving it wide use in wiring and plumbing."],
+[30,"Zn","Zinc",65.4,[2,8,18,2],4,12,"Zinc is a bluish-white metal used to galvanize steel against rust and is an essential trace nutrient."],
+[31,"Ga","Gallium",69.7,[2,8,18,3],4,13,"Gallium is a soft metal with such a low melting point it can melt in the palm of your hand."],
+[32,"Ge","Germanium",72.6,[2,8,18,4],4,14,"Germanium is a metalloid used as a semiconductor in early transistors and in fibre-optic cable."],
+[33,"As","Arsenic",74.9,[2,8,18,5],4,15,"Arsenic is a notoriously toxic metalloid also used in semiconductors and, historically, pesticides."],
+[34,"Se","Selenium",79.0,[2,8,18,6],4,16,"Selenium is a nonmetal essential to human health in trace amounts and used in solar cells."],
+[35,"Br","Bromine",79.9,[2,8,18,7],4,17,"Bromine is one of only two elements that are liquid at room temperature, used in flame retardants."],
+[36,"Kr","Krypton",83.8,[2,8,18,8],4,18,"Krypton is a rare noble gas used in high-performance light bulbs and camera flashes."],
+[37,"Rb","Rubidium",85.5,[2,8,18,8,1],5,1,"Rubidium is a soft, highly reactive alkali metal used in precise atomic clocks."],
+[38,"Sr","Strontium",87.6,[2,8,18,8,2],5,2,"Strontium is an alkaline earth metal that produces the brilliant reds seen in fireworks."],
+[39,"Y","Yttrium",88.9,[2,8,18,9,2],5,3,"Yttrium is a silvery transition metal used in LED phosphors and superconductors."],
+[40,"Zr","Zirconium",91.2,[2,8,18,10,2],5,4,"Zirconium is a corrosion-resistant metal used in nuclear reactor cladding and gem-like ceramics."],
+[41,"Nb","Niobium",92.9,[2,8,18,12,1],5,5,"Niobium is a soft, ductile transition metal used in superconducting magnets and jewellery."],
+[42,"Mo","Molybdenum",95.9,[2,8,18,13,1],5,6,"Molybdenum has a very high melting point and strengthens steel alloys for tools and pipelines."],
+[43,"Tc","Technetium",98,[2,8,18,13,2],5,7,"Technetium was the first artificially produced element and is now widely used in medical imaging."],
+[44,"Ru","Ruthenium",101.1,[2,8,18,15,1],5,8,"Ruthenium is a rare, hard transition metal used to harden platinum and palladium alloys."],
+[45,"Rh","Rhodium",102.9,[2,8,18,16,1],5,9,"Rhodium is extremely reflective and corrosion-resistant, used to plate jewellery and in catalytic converters."],
+[46,"Pd","Palladium",106.4,[2,8,18,18],5,10,"Palladium is a rare, silvery metal central to the catalytic converters that clean vehicle exhaust."],
+[47,"Ag","Silver",107.9,[2,8,18,18,1],5,11,"Silver has the highest electrical conductivity of any element and has long been prized in coins and jewellery."],
+[48,"Cd","Cadmium",112.4,[2,8,18,18,2],5,12,"Cadmium is a soft, toxic metal that forms only a 2+ ion, historically used in nickel–cadmium batteries."],
+[49,"In","Indium",114.8,[2,8,18,18,3],5,13,"Indium is a soft, silvery metal essential to the transparent conductive coatings inside touchscreens."],
+[50,"Sn","Tin",118.7,[2,8,18,18,4],5,14,"Tin is a malleable metal humans have alloyed into bronze and used as solder for millennia."],
+[51,"Sb","Antimony",121.8,[2,8,18,18,5],5,15,"Antimony is a brittle metalloid used in flame retardants and lead-acid battery alloys."],
+[52,"Te","Tellurium",127.6,[2,8,18,18,6],5,16,"Tellurium is a rare metalloid used in solar panels and to improve the machinability of steel."],
+[53,"I","Iodine",126.9,[2,8,18,18,7],5,17,"Iodine is a halogen essential to thyroid hormone production and widely used as a medical antiseptic."],
+[54,"Xe","Xenon",131.3,[2,8,18,18,8],5,18,"Xenon is a heavy noble gas used in high-intensity camera flashes and ion engines on spacecraft."],
+[55,"Cs","Cesium",132.9,[2,8,18,18,8,1],6,1,"Cesium is an extremely reactive alkali metal whose atomic vibrations define the international second."],
+[56,"Ba","Barium",137.3,[2,8,18,18,8,2],6,2,"Barium is a soft alkaline earth metal used as a contrast agent in medical X-ray imaging."],
+[57,"La","Lanthanum",138.9,[2,8,18,18,9,2],9,3,"Lanthanum is the first lanthanide, used in camera lenses and hybrid-car batteries."],
+[58,"Ce","Cerium",140.1,[2,8,18,19,9,2],9,4,"Cerium is the most abundant rare earth element, used in catalytic converters and lighter flints."],
+[59,"Pr","Praseodymium",140.9,[2,8,18,21,8,2],9,5,"Praseodymium is a rare earth metal that lends glass and ceramics a distinctive yellow-green tint."],
+[60,"Nd","Neodymium",144.2,[2,8,18,22,8,2],9,6,"Neodymium is a rare earth element used to make some of the strongest permanent magnets known."],
+[61,"Pm","Promethium",145,[2,8,18,23,8,2],9,7,"Promethium is a radioactive rare earth element with no stable isotopes, once used in luminous paint."],
+[62,"Sm","Samarium",150.4,[2,8,18,24,8,2],9,8,"Samarium is a rare earth metal used in powerful magnets and in certain cancer treatments."],
+[63,"Eu","Europium",152.0,[2,8,18,25,8,2],9,9,"Europium is a rare earth element responsible for the red and blue phosphors in many screens."],
+[64,"Gd","Gadolinium",157.3,[2,8,18,25,9,2],9,10,"Gadolinium is a rare earth metal used as a contrast agent in MRI scans thanks to its magnetic behaviour."],
+[65,"Tb","Terbium",158.9,[2,8,18,27,8,2],9,11,"Terbium is a rare earth element used in green phosphors for displays and efficient lighting."],
+[66,"Dy","Dysprosium",162.5,[2,8,18,28,8,2],9,12,"Dysprosium is a rare earth metal prized for its exceptional magnetism at high temperatures."],
+[67,"Ho","Holmium",164.9,[2,8,18,29,8,2],9,13,"Holmium has the strongest magnetic properties of any element and is used in some medical lasers."],
+[68,"Er","Erbium",167.3,[2,8,18,30,8,2],9,14,"Erbium is a rare earth element used to amplify signals inside fibre-optic communication cables."],
+[69,"Tm","Thulium",168.9,[2,8,18,31,8,2],9,15,"Thulium is one of the rarest and most expensive rare earths, used in portable X-ray devices."],
+[70,"Yb","Ytterbium",173.0,[2,8,18,32,8,2],9,16,"Ytterbium is a rare earth metal used in atomic clocks and to strengthen stainless steel."],
+[71,"Lu","Lutetium",175.0,[2,8,18,32,9,2],9,17,"Lutetium is the densest and hardest rare earth element, used in detectors for PET scans."],
+[72,"Hf","Hafnium",178.5,[2,8,18,32,10,2],6,4,"Hafnium is a corrosion-resistant metal used in nuclear reactor control rods and computer chips."],
+[73,"Ta","Tantalum",180.9,[2,8,18,32,11,2],6,5,"Tantalum resists corrosion superbly and is essential to the tiny capacitors inside smartphones."],
+[74,"W","Tungsten",183.8,[2,8,18,32,12,2],6,6,"Tungsten has the highest melting point of any metal, used in light-bulb filaments and cutting tools."],
+[75,"Re","Rhenium",186.2,[2,8,18,32,13,2],6,7,"Rhenium is one of the rarest metals in Earth's crust, used in high-temperature jet engine alloys."],
+[76,"Os","Osmium",190.2,[2,8,18,32,14,2],6,8,"Osmium is the densest naturally occurring element, once used to tip fountain-pen nibs and record needles."],
+[77,"Ir","Iridium",192.2,[2,8,18,32,15,2],6,9,"Iridium is extremely corrosion-resistant and famously found in a thin global layer linked to the dinosaur extinction."],
+[78,"Pt","Platinum",195.1,[2,8,18,32,17,1],6,10,"Platinum is a dense, unreactive precious metal used in jewellery, catalytic converters, and lab equipment."],
+[79,"Au","Gold",197.0,[2,8,18,32,18,1],6,11,"Gold is a dense, virtually unreactive precious metal prized throughout history for jewellery and currency."],
+[80,"Hg","Mercury",200.6,[2,8,18,32,18,2],6,12,"Mercury is the only metal that is liquid at room temperature, once common in thermometers."],
+[81,"Tl","Thallium",204.4,[2,8,18,32,18,3],6,13,"Thallium is a soft, highly toxic metal once used in rat poison and now found in some electronics."],
+[82,"Pb","Lead",207.2,[2,8,18,32,18,4],6,14,"Lead is a dense, soft metal once common in pipes and paint, now known to be highly toxic."],
+[83,"Bi","Bismuth",209.0,[2,8,18,32,18,5],6,15,"Bismuth is a brittle metal famous for its colourful, spiralling crystals and low toxicity for a heavy metal."],
+[84,"Po","Polonium",209,[2,8,18,32,18,6],6,16,"Polonium is a rare, intensely radioactive metalloid discovered by Marie and Pierre Curie."],
+[85,"At","Astatine",210,[2,8,18,32,18,7],6,17,"Astatine is the rarest naturally occurring element — so radioactive that only a trace ever exists at once."],
+[86,"Rn","Radon",222,[2,8,18,32,18,8],6,18,"Radon is a radioactive noble gas that can seep into basements and is a leading cause of lung cancer."],
+[87,"Fr","Francium",223,[2,8,18,32,18,8,1],7,1,"Francium is one of the rarest, most unstable natural elements, decaying away within minutes of forming."],
+[88,"Ra","Radium",226,[2,8,18,32,18,8,2],7,2,"Radium is a radioactive alkaline earth metal once painted onto glow-in-the-dark clock dials."],
+[89,"Ac","Actinium",227,[2,8,18,32,18,9,2],10,3,"Actinium is a rare radioactive metal that glows faintly blue in the dark from its own radioactivity."],
+[90,"Th","Thorium",232.0,[2,8,18,32,18,10,2],10,4,"Thorium is a mildly radioactive metal being explored as a safer alternative nuclear fuel."],
+[91,"Pa","Protactinium",231.0,[2,8,18,32,20,9,2],10,5,"Protactinium is a rare, highly radioactive and toxic metal with almost no practical uses."],
+[92,"U","Uranium",238.0,[2,8,18,32,21,9,2],10,6,"Uranium is a dense radioactive metal that fuels nuclear power plants through fission."],
+[93,"Np","Neptunium",237,[2,8,18,32,22,9,2],10,7,"Neptunium was the first synthetic transuranium element, made by bombarding uranium with neutrons."],
+[94,"Pu","Plutonium",244,[2,8,18,32,24,8,2],10,8,"Plutonium is a synthetic radioactive metal known for powering nuclear weapons and deep-space probes."],
+[95,"Am","Americium",243,[2,8,18,32,25,8,2],10,9,"Americium is a synthetic radioactive element used inside the ionization chambers of smoke detectors."],
+[96,"Cm","Curium",247,[2,8,18,32,25,9,2],10,10,"Curium is a synthetic radioactive metal named in honour of Marie and Pierre Curie."],
+[97,"Bk","Berkelium",247,[2,8,18,32,27,8,2],10,11,"Berkelium is a synthetic radioactive element first created at the University of California, Berkeley."],
+[98,"Cf","Californium",251,[2,8,18,32,28,8,2],10,12,"Californium is a synthetic element used as a neutron source to help start nuclear reactors."],
+[99,"Es","Einsteinium",252,[2,8,18,32,29,8,2],10,13,"Einsteinium was discovered in the debris of the first hydrogen bomb test and named after Albert Einstein."],
+[100,"Fm","Fermium",257,[2,8,18,32,30,8,2],10,14,"Fermium is a synthetic radioactive element named after physicist Enrico Fermi."],
+[101,"Md","Mendelevium",258,[2,8,18,32,31,8,2],10,15,"Mendelevium is a synthetic element named after Dmitri Mendeleev, creator of the periodic table."],
+[102,"No","Nobelium",259,[2,8,18,32,32,8,2],10,16,"Nobelium is a synthetic radioactive element named after Alfred Nobel."],
+[103,"Lr","Lawrencium",262,[2,8,18,32,32,8,3],10,17,"Lawrencium is a synthetic radioactive element named after physicist Ernest Lawrence."],
+[104,"Rf","Rutherfordium",267,[2,8,18,32,32,10,2],7,4,"Rutherfordium is a synthetic superheavy element named after physicist Ernest Rutherford."],
+[105,"Db","Dubnium",268,[2,8,18,32,32,11,2],7,5,"Dubnium is a synthetic superheavy element named after the research institute in Dubna, Russia."],
+[106,"Sg","Seaborgium",269,[2,8,18,32,32,12,2],7,6,"Seaborgium is a synthetic superheavy element named after chemist Glenn Seaborg."],
+[107,"Bh","Bohrium",270,[2,8,18,32,32,13,2],7,7,"Bohrium is a synthetic superheavy element named after physicist Niels Bohr."],
+[108,"Hs","Hassium",269,[2,8,18,32,32,14,2],7,8,"Hassium is a synthetic superheavy element named after the German state of Hesse."],
+[109,"Mt","Meitnerium",278,[2,8,18,32,32,15,2],7,9,"Meitnerium is a synthetic superheavy element named after physicist Lise Meitner."],
+[110,"Ds","Darmstadtium",281,[2,8,18,32,32,17,1],7,10,"Darmstadtium is a synthetic superheavy element named after the city of Darmstadt, Germany."],
+[111,"Rg","Roentgenium",282,[2,8,18,32,32,18,1],7,11,"Roentgenium is a synthetic superheavy element named after Wilhelm Röntgen, discoverer of X-rays."],
+[112,"Cn","Copernicium",285,[2,8,18,32,32,18,2],7,12,"Copernicium is a synthetic superheavy element named after astronomer Nicolaus Copernicus."],
+[113,"Nh","Nihonium",286,[2,8,18,32,32,18,3],7,13,"Nihonium is a synthetic element named after Japan, where it was first produced."],
+[114,"Fl","Flerovium",289,[2,8,18,32,32,18,4],7,14,"Flerovium is a synthetic superheavy element named after Russia's Flerov Laboratory of Nuclear Reactions."],
+[115,"Mc","Moscovium",290,[2,8,18,32,32,18,5],7,15,"Moscovium is a synthetic superheavy element named after the Moscow region of Russia."],
+[116,"Lv","Livermorium",293,[2,8,18,32,32,18,6],7,16,"Livermorium is a synthetic superheavy element named after Lawrence Livermore National Laboratory."],
+[117,"Ts","Tennessine",294,[2,8,18,32,32,18,7],7,17,"Tennessine is a synthetic superheavy halogen named after the state of Tennessee."],
+[118,"Og","Oganesson",294,[2,8,18,32,32,18,8],7,18,"Oganesson is the heaviest known element, a synthetic noble gas named after physicist Yuri Oganessian."]
+];
+
+function range(a,b){const r=[];for(let i=a;i<=b;i++)r.push(i);return r;}
+const CATS = {
+  alkali:[3,11,19,37,55,87], alkaline:[4,12,20,38,56,88],
+  lanthanide:range(57,71), actinide:range(89,103),
+  transition:[...range(21,30),...range(39,48),...range(72,80),...range(104,112)],
+  metalloid:[5,14,32,33,51,52,85],
+  post:[13,31,49,50,81,82,83,84,113,114,115,116],
+  halogen:[9,17,35,53,117], noble:[2,10,18,36,54,86,118],
+  nonmetal:[1,6,7,8,15,16,34]
+};
+const CAT_LABEL={alkali:"Alkali metal",alkaline:"Alkaline earth metal",lanthanide:"Lanthanide",actinide:"Actinide",transition:"Transition metal",metalloid:"Metalloid",post:"Post-transition metal",halogen:"Halogen",noble:"Noble gas",nonmetal:"Reactive nonmetal"};
+const CAT_VAR={alkali:"--cat-alkali",alkaline:"--cat-alkaline",lanthanide:"--cat-lanth",actinide:"--cat-actin",transition:"--cat-transition",metalloid:"--cat-metalloid",post:"--cat-post",halogen:"--cat-halogen",noble:"--cat-noble",nonmetal:"--cat-nonmetal"};
+function categoryOf(n){ for(const k in CATS) if(CATS[k].includes(n)) return k; return "nonmetal"; }
+const SHELL_NAMES = ["K","L","M","N","O","P","Q"];
+
+/* ===================== BUILD TABLE ===================== */
+const grid=document.getElementById('pt-grid');
+[{row:6,col:3,label:"57–71"},{row:7,col:3,label:"89–103"}].forEach(p=>{
+  const d=document.createElement('div'); d.className='tile-ph';
+  d.style.gridRow=p.row; d.style.gridColumn=p.col; d.textContent=p.label;
+  grid.appendChild(d);
+});
+const els={};
+ELEMENTS.forEach(e=>{
+  const [n,sym,name,mass,shells,row,col,desc]=e;
+  const cat=categoryOf(n);
+  const data={n,sym,name,mass,shells,row,col,desc,cat};
+  els[sym.toLowerCase()]=data; els[n]=data;
+  const t=document.createElement('button');
+  t.className='tile'; t.style.gridRow=row; t.style.gridColumn=col;
+  t.style.setProperty('--cat',`var(${CAT_VAR[cat]})`);
+  t.dataset.sym=sym; t.setAttribute('aria-label',name);
+  t.innerHTML=`<div class="num">${n}</div><div class="sym">${sym}</div><div class="mass">${mass}</div>`;
+  t.addEventListener('click',()=>openElement(data,t));
+  grid.appendChild(t);
+});
+const legend=document.getElementById('legend');
+Object.keys(CAT_LABEL).forEach(k=>{
+  const s=document.createElement('span');
+  s.innerHTML=`<i style="background:var(${CAT_VAR[k]})"></i>${CAT_LABEL[k]}`;
+  legend.appendChild(s);
+});
+
+/* search */
+document.getElementById('search-btn').addEventListener('click',doSearch);
+document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+function doSearch(){
+  const q=document.getElementById('search-input').value.trim().toLowerCase();
+  if(!q) return;
+  let found=els[q]||null;
+  if(!found) for(const k in els){ if(els[k].name.toLowerCase()===q){found=els[k];break;} }
+  if(!found) for(const k in els){ if(els[k].name.toLowerCase().startsWith(q)){found=els[k];break;} }
+  if(found){
+    const tile=grid.querySelector(`.tile[data-sym="${found.sym}"]`);
+    tile.classList.add('pulse'); setTimeout(()=>tile.classList.remove('pulse'),2000);
+    openElement(found,tile);
+  }
+}
+
+/* ===================== ZOOM TRANSITION ===================== */
+const tableWrap=document.getElementById('table-wrap');
+const atomView=document.getElementById('atom-view');
+const portal=document.getElementById('portal');
+const portalGlyph=portal.querySelector('.glyph');
+let busy=false, currentData=null, lastTile=null;
+
+function catColor(cat){
+  return getComputedStyle(document.documentElement).getPropertyValue(CAT_VAR[cat]).trim();
+}
+
+function openElement(data,tileEl){
+  if(busy) return;
+  busy=true; currentData=data; lastTile=tileEl;
+
+  const r=tileEl.getBoundingClientRect();
+  const vw=innerWidth, vh=innerHeight;
+  const cx=r.left+r.width/2, cy=r.top+r.height/2;
+
+  // 1. table dollies toward the clicked tile, blurs out
+  tableWrap.style.transformOrigin=`${(cx/vw)*100}% ${(cy/vh)*100}%`;
+  requestAnimationFrame(()=>{
+    tableWrap.style.transform='scale(3.4)';
+    tableWrap.classList.add('receding');
+  });
+
+  // 2. portal: the tile itself detaches, flies to centre, swells into a glowing orb
+  const col=catColor(data.cat);
+  portal.style.transition='none';
+  portal.style.left=r.left+'px'; portal.style.top=r.top+'px';
+  portal.style.width=r.width+'px'; portal.style.height=r.height+'px';
+  portal.style.background=`radial-gradient(circle at 42% 38%, ${col}, ${col} 45%, rgba(10,22,38,1) 130%)`;
+  portal.style.borderRadius='2px';
+  portal.style.transform='translate(0,0) scale(1)';
+  portal.style.opacity='1';
+  portalGlyph.textContent=data.sym;
+  portalGlyph.style.fontSize=Math.max(9,r.width*0.55)+'px';
+  portalGlyph.style.opacity='1';
+  portalGlyph.style.transition='none';
+
+  const target=Math.max(vw,vh)*1.5;
+  const scale=target/r.width;
+
+  requestAnimationFrame(()=>{
+    portal.style.transition='transform .9s cubic-bezier(.66,0,.28,1), opacity .35s ease .62s, border-radius .55s ease';
+    portalGlyph.style.transition='opacity .3s ease .05s, transform .9s cubic-bezier(.66,0,.28,1)';
+    portal.style.borderRadius='50%';
+    portal.style.transform=
+      `translate(${vw/2-cx}px, ${vh/2-cy}px) scale(${scale})`;
+    portalGlyph.style.opacity='0';
+    portalGlyph.style.transform='scale(.4)';
+    portal.style.opacity='0';
+  });
+
+  // 3. atom view fades up beneath the swelling orb, shells bloom outward
+  setTimeout(()=>{
+    buildAtom(data);
+    atomView.classList.add('show');
+  }, 560);
+  setTimeout(()=>{ busy=false; }, 1000);
+}
+
+document.getElementById('close-btn').addEventListener('click',closeElement);
+function closeElement(){
+  if(busy) return;
+  busy=true;
+  collapseAtom();
+  atomView.classList.remove('show');
+  setTimeout(()=>{
+    tableWrap.classList.remove('receding');
+    tableWrap.style.transform='scale(1)';
+    setTimeout(()=>{ busy=false; }, 1000);
+  }, 260);
+}
+addEventListener('keydown',e=>{ if(e.key==='Escape' && atomView.classList.contains('show')) closeElement(); });
+
+/* ===================== THREE.JS ATOM ===================== */
+let renderer,scene,camera,root,rafId;
+let rotY=0.5, rotX=-0.18, autoRot=true, dragging=false, lastX=0,lastY=0;
+let dist=14, targetDist=14, fitDist=14, minDist=2, maxDist=90;
+let shells=[], bloomTime=0, nucleusGroup=null;
+let glowTex=null;
+
+function makeGlowTexture(){
+  const c=document.createElement('canvas'); c.width=c.height=128;
+  const g=c.getContext('2d');
+  const grd=g.createRadialGradient(64,64,0,64,64,64);
+  grd.addColorStop(0,'rgba(255,255,255,1)');
+  grd.addColorStop(0.22,'rgba(160,220,255,0.75)');
+  grd.addColorStop(0.55,'rgba(90,160,255,0.22)');
+  grd.addColorStop(1,'rgba(40,90,200,0)');
+  g.fillStyle=grd; g.fillRect(0,0,128,128);
+  return new THREE.CanvasTexture(c);
+}
+
+function initThree(){
+  const canvas=document.getElementById('atom-canvas');
+  renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  scene=new THREE.Scene();
+  camera=new THREE.PerspectiveCamera(42,1,0.1,600);
+  glowTex=makeGlowTexture();
+
+  scene.add(new THREE.AmbientLight(0x93b4d6,0.7));
+  const k=new THREE.PointLight(0xcfe8ff,1.25,0); k.position.set(9,12,14); scene.add(k);
+  const f=new THREE.PointLight(0xff8b62,0.55,0); f.position.set(-13,-8,-10); scene.add(f);
+  const r=new THREE.DirectionalLight(0x6fa8ff,0.45); r.position.set(-6,4,-9); scene.add(r);
+
+  // starfield for depth
+  const sGeo=new THREE.BufferGeometry();
+  const pts=[];
+  for(let i=0;i<420;i++){
+    const rad=90+Math.random()*180;
+    const th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+    pts.push(rad*Math.sin(ph)*Math.cos(th), rad*Math.sin(ph)*Math.sin(th), rad*Math.cos(ph));
+  }
+  sGeo.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
+  scene.add(new THREE.Points(sGeo,new THREE.PointsMaterial({color:0x8fbfe8,size:0.9,transparent:true,opacity:0.5})));
+
+  resize(); addEventListener('resize',resize);
+  setupControls(canvas);
+  loop();
+}
+function resize(){
+  if(!renderer) return;
+  const w=innerWidth,h=innerHeight;
+  renderer.setSize(w,h);
+  camera.aspect=w/h; camera.updateProjectionMatrix();
+  if(currentData) computeFit();
+}
+
+function setupControls(canvas){
+  const pointers=new Map();
+  let pinchStart=0, pinchDist0=0;
+  canvas.addEventListener('pointerdown',e=>{
+    canvas.setPointerCapture(e.pointerId);
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===1){ dragging=true; autoRot=false; lastX=e.clientX; lastY=e.clientY; }
+    if(pointers.size===2){ dragging=false; pinchDist0=pDist(pointers); pinchStart=targetDist; }
+  });
+  canvas.addEventListener('pointermove',e=>{
+    if(!pointers.has(e.pointerId)) return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===2 && pinchDist0>0){
+      const d=pDist(pointers);
+      targetDist=clamp(pinchStart*(pinchDist0/d),minDist,maxDist);
+      return;
+    }
+    if(dragging){
+      rotY+=(e.clientX-lastX)*0.0065;
+      rotX=clamp(rotX+(e.clientY-lastY)*0.0065,-1.35,1.35);
+      lastX=e.clientX; lastY=e.clientY;
+    }
+  });
+  const end=e=>{ pointers.delete(e.pointerId); if(pointers.size<2) pinchDist0=0; if(pointers.size===0) dragging=false; };
+  canvas.addEventListener('pointerup',end);
+  canvas.addEventListener('pointercancel',end);
+  canvas.addEventListener('wheel',e=>{
+    e.preventDefault();
+    targetDist=clamp(targetDist*(1+e.deltaY*0.0012),minDist,maxDist);
+  },{passive:false});
+
+  document.getElementById('zin').onclick =()=> targetDist=clamp(targetDist*0.78,minDist,maxDist);
+  document.getElementById('zout').onclick=()=> targetDist=clamp(targetDist*1.28,minDist,maxDist);
+  document.getElementById('zfit').onclick=()=>{ targetDist=fitDist; rotX=-0.18; autoRot=true; };
+}
+function pDist(m){ const a=[...m.values()]; return Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y); }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+
+function disposeRoot(){
+  if(!root) return;
+  scene.remove(root);
+  root.traverse(o=>{
+    if(o.geometry) o.geometry.dispose();
+    if(o.material){ Array.isArray(o.material)?o.material.forEach(m=>m.dispose()):o.material.dispose(); }
+  });
+}
+
+let outerRadius=10;
+function computeFit(){
+  const vFov=camera.fov*Math.PI/180;
+  const needV=outerRadius/Math.tan(vFov/2);
+  const hFov=2*Math.atan(Math.tan(vFov/2)*camera.aspect);
+  const needH=outerRadius/Math.tan(hFov/2);
+  // panel occupies the lower ~third on phones, so pad more when narrow
+  const pad = innerWidth<760 ? 1.55 : 1.30;
+  fitDist=clamp(Math.max(needV,needH)*pad, 4, maxDist);
+  minDist=Math.max(1.5, outerRadius*0.12);
+  maxDist=fitDist*4.5;
+}
+
+function buildAtom(data){
+  if(!renderer) initThree();
+  disposeRoot();
+  root=new THREE.Group(); scene.add(root);
+  shells=[]; bloomTime=0;
+  rotY=0.5; rotX=-0.18; autoRot=true;
+
+  const protons=data.n;
+  const neutrons=Math.max(0,Math.round(data.mass)-data.n);
+  const total=protons+neutrons;
+
+  /* --- nucleus --- */
+  nucleusGroup=new THREE.Group();
+  const coreR = 0.42 + Math.cbrt(total)*0.20;
+  const nucGeo=new THREE.SphereGeometry(0.19,10,10);
+  const pMat=new THREE.MeshStandardMaterial({color:0xff6b5e,roughness:.34,metalness:.12,emissive:0x5a1208,emissiveIntensity:.45});
+  const nMat=new THREE.MeshStandardMaterial({color:0xc3ccd8,roughness:.42,metalness:.2,emissive:0x141922,emissiveIntensity:.3});
+  const cap=300, k=total>cap?cap/total:1;
+  const pN=Math.max(1,Math.round(protons*k)), nN=Math.max(0,Math.round(neutrons*k));
+  const pMesh=new THREE.InstancedMesh(nucGeo,pMat,pN);
+  const nMesh=new THREE.InstancedMesh(nucGeo,nMat,nN);
+  const dum=new THREE.Object3D();
+  const pt=()=>{
+    const th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+    const rr=coreR*Math.cbrt(Math.random());
+    return new THREE.Vector3(rr*Math.sin(ph)*Math.cos(th),rr*Math.sin(ph)*Math.sin(th),rr*Math.cos(ph));
+  };
+  for(let i=0;i<pN;i++){ dum.position.copy(pt()); dum.rotation.set(Math.random()*3,Math.random()*3,0); dum.updateMatrix(); pMesh.setMatrixAt(i,dum.matrix); }
+  for(let i=0;i<nN;i++){ dum.position.copy(pt()); dum.rotation.set(Math.random()*3,Math.random()*3,0); dum.updateMatrix(); nMesh.setMatrixAt(i,dum.matrix); }
+  nucleusGroup.add(pMesh,nMesh);
+
+  // nucleus halo
+  const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xffb08a,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false}));
+  halo.scale.setScalar(coreR*6.2);
+  nucleusGroup.add(halo);
+  root.add(nucleusGroup);
+
+  /* --- shells --- */
+  const gap = 1.35;
+  const eR  = 0.17;
+  data.shells.forEach((count,i)=>{
+    const radius = coreR + 1.9 + i*gap*(1 + i*0.06);
+    const pivot=new THREE.Group();
+    pivot.rotation.x = 0.30 + i*0.44;
+    pivot.rotation.z = i*0.37;
+    root.add(pivot);
+
+    // orbit ring — two-tone for depth
+    const ring=new THREE.Mesh(
+      new THREE.RingGeometry(radius-0.012,radius+0.012,140),
+      new THREE.MeshBasicMaterial({color:0x7fd0ff,transparent:true,opacity:0.30,side:THREE.DoubleSide,depthWrite:false})
+    );
+    ring.rotation.x=Math.PI/2; pivot.add(ring);
+
+    const eGroup=new THREE.Group();
+    const eGeo=new THREE.SphereGeometry(eR,14,14);
+    const eMat=new THREE.MeshStandardMaterial({color:0xaef0ff,emissive:0x3aaeff,emissiveIntensity:1.5,roughness:.25,metalness:.1});
+    const glowMat=new THREE.SpriteMaterial({map:glowTex,color:0x74d2ff,transparent:true,opacity:.75,blending:THREE.AdditiveBlending,depthWrite:false});
+    for(let e=0;e<count;e++){
+      const ang=(e/count)*Math.PI*2;
+      const holder=new THREE.Group();
+      const s=new THREE.Mesh(eGeo,eMat);
+      const g=new THREE.Sprite(glowMat.clone());
+      g.scale.setScalar(eR*7);
+      holder.add(s,g);
+      holder.position.set(Math.cos(ang)*radius,0,Math.sin(ang)*radius);
+      eGroup.add(holder);
+    }
+    pivot.add(eGroup);
+
+    const speed = 0.55/Math.pow(i+1,0.9) * (i%2===0?1:-1);
+    shells.push({pivot,eGroup,ring,speed,radius,count,delay:i*0.09});
+    pivot.scale.setScalar(0.001); // bloom in
+  });
+
+  outerRadius = shells.length ? shells[shells.length-1].radius*1.06 : coreR*3;
+  computeFit();
+  dist = fitDist*2.6; targetDist = fitDist;   // pull-in on entry
+  camera.position.set(0,0,dist);
+
+  /* --- HUD --- */
+  document.getElementById('info-sym').textContent=data.sym;
+  document.getElementById('info-name').textContent=`${data.name} — #${data.n}`;
+  document.getElementById('info-cat').textContent=CAT_LABEL[data.cat];
+  document.getElementById('info-stats').innerHTML=`
+    <div>Atomic mass<b>${data.mass}</b></div>
+    <div>Protons<b>${protons}</b></div>
+    <div>Neutrons (approx.)<b>${neutrons}</b></div>
+    <div>Electrons<b>${protons}</b></div>`;
+  document.getElementById('info-desc').textContent=data.desc;
+  const named=data.shells.map((c,i)=>`${SHELL_NAMES[i]||i+1}:${c}`).join('  ');
+  document.getElementById('shell-label').textContent=`shells  ${named}`;
+}
+
+let collapsing=false;
+function collapseAtom(){ collapsing=true; setTimeout(()=>collapsing=false,700); }
+
+function loop(){
+  rafId=requestAnimationFrame(loop);
+  if(!scene) return;
+  const dt=0.016;
+
+  if(root){
+    bloomTime+=dt;
+    shells.forEach((s,i)=>{
+      const t=clamp((bloomTime-s.delay)/0.55,0,1);
+      const e=1-Math.pow(1-t,3);           // easeOutCubic
+      const target=collapsing?0.001:e;
+      s.pivot.scale.setScalar(s.pivot.scale.x + (target-s.pivot.scale.x)*0.22);
+      s.eGroup.rotation.y += s.speed*dt;
+      s.ring.material.opacity = 0.30*e;
+    });
+    if(nucleusGroup){
+      const ns=collapsing?0.001:1;
+      nucleusGroup.scale.setScalar(nucleusGroup.scale.x+(ns-nucleusGroup.scale.x)*0.2);
+      nucleusGroup.rotation.y += dt*0.32;
+      nucleusGroup.rotation.x += dt*0.14;
+    }
+    if(autoRot) rotY += dt*0.13;
+    root.rotation.y += (rotY-root.rotation.y)*0.12;
+    root.rotation.x += (rotX-root.rotation.x)*0.12;
+  }
+
+  dist += (targetDist-dist)*0.085;
+  camera.position.set(0,0,dist);
+  camera.lookAt(0,0,0);
+  renderer.render(scene,camera);
+}
+</script>
+</body>
+</html>
