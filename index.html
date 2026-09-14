@@ -3,282 +3,243 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Elemental — the periodic table, up close</title>
+<title>Elemental — from the desk to the quark</title>
 <style>
   :root{
-    --paper:#f4ecda;
-    --paper-shade:#e6dbc2;
-    --ink:#221b12;
-    --ink-soft:#5e5442;
-    --accent:#b5502f;
-    --cat-alkali:#e0765a;
-    --cat-alkaline:#dfa14a;
-    --cat-transition:#c9a53b;
-    --cat-post:#6fae7a;
-    --cat-metalloid:#4f9e94;
-    --cat-nonmetal:#4f8fbf;
-    --cat-halogen:#7a7ec9;
-    --cat-noble:#9a6fc9;
-    --cat-lanth:#c96fa8;
-    --cat-actin:#c9536f;
+    --paper:#f4ecda; --paper-shade:#e6dbc2;
+    --ink:#221b12; --ink-soft:#5e5442; --accent:#b5502f;
+    --cat-alkali:#e0765a; --cat-alkaline:#dfa14a; --cat-transition:#c9a53b;
+    --cat-post:#6fae7a; --cat-metalloid:#4f9e94; --cat-nonmetal:#4f8fbf;
+    --cat-halogen:#7a7ec9; --cat-noble:#9a6fc9; --cat-lanth:#c96fa8; --cat-actin:#c9536f;
   }
-  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{
-    margin:0; padding:0; width:100%; height:100%;
-    overflow:hidden; background:#140d08;
-    font-family: Georgia, 'Iowan Old Style', serif;
-  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#140d08;font-family:Georgia,'Iowan Old Style',serif;}
 
-  /* ================= DESK ================= */
-  #desk{
-    position:fixed; inset:0;
-    display:flex; align-items:center; justify-content:center;
-    perspective: 2000px;
+  /* ============ DESK ============ */
+  #desk{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
     background:
-      /* grain */
-      repeating-linear-gradient(88deg, rgba(0,0,0,0.055) 0 1px, transparent 1px 9px),
-      repeating-linear-gradient(92deg, rgba(255,255,255,0.028) 0 1px, transparent 1px 23px),
-      /* plank seams */
-      repeating-linear-gradient(90deg, transparent 0 258px, rgba(0,0,0,0.30) 258px 262px),
-      /* colour */
-      radial-gradient(ellipse 120% 90% at 32% 12%, #8a6242 0%, #6b4a33 42%, #46301f 78%, #2a1a10 100%);
-  }
-  #vignette{
-    position:absolute; inset:0; pointer-events:none;
-    background: radial-gradient(ellipse 75% 65% at 50% 46%, transparent 30%, rgba(0,0,0,0.30) 68%, rgba(0,0,0,0.72) 100%);
-  }
-  #lamp{
-    position:absolute; inset:0; pointer-events:none;
-    background: radial-gradient(ellipse 48% 40% at 38% 22%, rgba(255,226,175,0.20), transparent 70%);
-    mix-blend-mode: screen;
-  }
+      repeating-linear-gradient(88deg,rgba(0,0,0,.055) 0 1px,transparent 1px 9px),
+      repeating-linear-gradient(92deg,rgba(255,255,255,.028) 0 1px,transparent 1px 23px),
+      repeating-linear-gradient(90deg,transparent 0 258px,rgba(0,0,0,.30) 258px 262px),
+      radial-gradient(ellipse 120% 90% at 32% 12%,#8a6242 0%,#6b4a33 42%,#46301f 78%,#2a1a10 100%);}
+  #vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 75% 65% at 50% 46%,transparent 30%,rgba(0,0,0,.30) 68%,rgba(0,0,0,.72) 100%);}
+  #lamp{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(ellipse 48% 40% at 38% 22%,rgba(255,226,175,.20),transparent 70%);}
 
-  #table-wrap{
-    position:relative;
-    width: min(96vw, 1460px);
-    transform-style: preserve-3d;
-    transition: transform 1s cubic-bezier(.7,0,.25,1), filter .75s ease, opacity .75s ease;
-    will-change: transform, filter, opacity;
-  }
-  #table-wrap.receding{
-    filter: blur(9px) brightness(.55);
-    opacity:0;
-  }
+  #table-wrap{position:relative;width:min(96vw,1460px);
+    transition:transform 1s cubic-bezier(.7,0,.25,1),filter .8s ease,opacity .8s ease;will-change:transform,filter,opacity;}
+  #table-wrap.receding{filter:blur(10px) brightness(.5);opacity:0;}
 
-  /* paper sheet */
-  #paper{
-    position:relative;
-    background:
-      linear-gradient(112deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 38%),
-      radial-gradient(ellipse at 18% 8%, #fbf5e6 0%, var(--paper) 45%, var(--paper-shade) 100%);
-    padding: clamp(11px,1.5vw,24px) clamp(12px,1.7vw,28px) clamp(14px,1.8vw,24px);
-    border-radius: 2px 3px 2px 3px;
-    transform: rotateX(7deg) rotateZ(-0.7deg);
-    transform-origin: 50% 60%;
-    box-shadow:
-      0 2px 3px rgba(0,0,0,0.35),
-      0 14px 26px rgba(0,0,0,0.42),
-      0 44px 80px rgba(0,0,0,0.55),
-      inset 0 0 90px rgba(150,120,70,0.10);
-  }
-  /* fibre texture + faint fold crease */
-  #paper::before{
-    content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
-    background:
-      linear-gradient(90deg, transparent 49.6%, rgba(0,0,0,0.045) 49.9%, rgba(255,255,255,0.35) 50.2%, transparent 50.6%),
-      repeating-linear-gradient(72deg, rgba(0,0,0,0.014) 0 1px, transparent 1px 4px),
-      repeating-linear-gradient(160deg, rgba(0,0,0,0.012) 0 1px, transparent 1px 5px);
-    mix-blend-mode: multiply;
-  }
-  /* curled lower-right corner lift */
-  #paper::after{
-    content:""; position:absolute; right:-1px; bottom:-1px;
-    width: 58px; height: 58px; pointer-events:none;
-    background: linear-gradient(315deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.05) 38%, transparent 60%);
-    border-bottom-right-radius: 3px;
-  }
-  /* punched holes */
-  .hole{
-    position:absolute; left: 8px; width: 13px; height:13px; border-radius:50%;
-    background: radial-gradient(circle at 40% 35%, #3b2718, #1d1108);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.35);
-  }
-  .hole.h1{ top: 18%; } .hole.h2{ top: 50%; } .hole.h3{ top: 82%; }
+  .under{position:absolute;inset:0;pointer-events:none;border-radius:3px;background:#e8dcc4;
+    box-shadow:0 18px 40px rgba(0,0,0,.45)}
+  .under.u1{transform:rotate(-1.4deg) translate(-7px,5px);background:#e2d5bb}
+  .under.u2{transform:rotate(.9deg) translate(6px,8px);background:#d9ccb0}
+  #paper{position:relative;z-index:2;padding:clamp(11px,1.5vw,24px) clamp(12px,1.7vw,28px) clamp(14px,1.8vw,24px);
+    border-radius:2px 3px 2px 3px;
+    background:linear-gradient(112deg,rgba(255,255,255,.42) 0%,rgba(255,255,255,0) 38%),
+      radial-gradient(ellipse at 18% 8%,#fbf5e6 0%,var(--paper) 45%,var(--paper-shade) 100%);
+    box-shadow:0 2px 3px rgba(0,0,0,.35),0 14px 26px rgba(0,0,0,.42),0 44px 80px rgba(0,0,0,.55),inset 0 0 90px rgba(150,120,70,.10);}
+  #paper::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;mix-blend-mode:multiply;
+    background:linear-gradient(90deg,transparent 49.6%,rgba(0,0,0,.045) 49.9%,rgba(255,255,255,.35) 50.2%,transparent 50.6%),
+      repeating-linear-gradient(72deg,rgba(0,0,0,.014) 0 1px,transparent 1px 4px),
+      repeating-linear-gradient(160deg,rgba(0,0,0,.012) 0 1px,transparent 1px 5px);}
+  #paper::after{content:"";position:absolute;right:-1px;bottom:-1px;width:58px;height:58px;pointer-events:none;
+    background:linear-gradient(315deg,rgba(0,0,0,.20) 0%,rgba(0,0,0,.05) 38%,transparent 60%);border-bottom-right-radius:3px;}
+  .hole{position:absolute;left:8px;width:13px;height:13px;border-radius:50%;
+    background:radial-gradient(circle at 40% 35%,#3b2718,#1d1108);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.35);}
+  .hole.h1{top:18%}.hole.h2{top:50%}.hole.h3{top:82%}
 
-  .pt-head{
-    display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
-    border-bottom: 1.5px solid var(--ink);
-    padding:0 0 7px 22px; margin-bottom:11px; color:var(--ink);
-  }
-  .pt-head h1{ font-size: clamp(16px,1.6vw,24px); margin:0; font-weight:600; letter-spacing:.2px;}
-  .pt-head p{ margin:2px 0 0; font-size: clamp(9px,.8vw,12.5px); color:var(--ink-soft); font-style:italic;}
-  #search-row{ display:flex; gap:7px; }
-  #search-row input{
-    font-family:Georgia,serif; font-size:clamp(10px,.85vw,13px); padding:5px 9px;
-    border:1px solid var(--ink-soft); border-radius:3px;
-    background:rgba(255,255,255,.55); color:var(--ink); width:clamp(96px,10vw,160px);
-  }
-  #search-row button{
-    font-family:Georgia,serif; font-size:clamp(10px,.85vw,13px); padding:5px 12px;
-    border:1px solid rgba(0,0,0,.4); border-radius:3px;
-    background:var(--accent); color:#fff6ec; cursor:pointer;
-  }
+  .pt-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+    border-bottom:1.5px solid var(--ink);padding:0 0 7px 22px;margin-bottom:11px;color:var(--ink);}
+  .pt-head h1{font-size:clamp(16px,1.6vw,24px);margin:0;font-weight:600}
+  .pt-head p{margin:2px 0 0;font-size:clamp(9px,.8vw,12.5px);color:var(--ink-soft);font-style:italic}
+  #tools{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+  #tools input{font-family:Georgia,serif;font-size:clamp(10px,.85vw,13px);padding:5px 9px;border:1px solid var(--ink-soft);
+    border-radius:3px;background:rgba(255,255,255,.55);color:var(--ink);width:clamp(84px,9vw,150px)}
+  #tools button{font-family:Georgia,serif;font-size:clamp(10px,.85vw,13px);padding:5px 12px;border:1px solid rgba(0,0,0,.4);
+    border-radius:3px;background:var(--accent);color:#fff6ec;cursor:pointer}
+  #tools button.ghost{background:transparent;color:var(--ink);border-color:var(--ink-soft)}
+  #tools button.ghost.on{background:#2e5f52;color:#f0fff9;border-color:#1d3f36}
 
-  #pt-grid{
-    display:grid; grid-template-columns: repeat(18, 1fr);
-    gap: clamp(2px,.3vw,5px); margin-left:22px;
-  }
-  .tile,.tile-ph{
-    aspect-ratio:1/1; border-radius:2px; position:relative;
-    display:flex; flex-direction:column; justify-content:space-between;
-    padding:3px 4px; font-family:Georgia,serif; color:#1b140c;
-    border:1px solid rgba(0,0,0,.30); overflow:hidden;
-  }
-  .tile{
-    cursor:pointer;
-    background:
-      linear-gradient(160deg, rgba(255,255,255,.35), rgba(255,255,255,0) 60%),
-      color-mix(in srgb, var(--cat) 34%, var(--paper));
-    transition: transform .18s cubic-bezier(.3,1.4,.5,1), box-shadow .18s ease, background .18s ease;
-  }
-  .tile:hover,.tile:focus-visible{
-    transform: translateY(-3px) scale(1.12); z-index:6; outline:none;
-    box-shadow: 0 7px 16px rgba(0,0,0,.4);
-    background: linear-gradient(160deg, rgba(255,255,255,.4), rgba(255,255,255,0) 60%),
-                color-mix(in srgb, var(--cat) 58%, var(--paper));
-  }
-  .tile.pulse{ animation: pulse 1s ease 2; }
-  @keyframes pulse{
-    0%,100%{ box-shadow:0 0 0 0 rgba(181,80,47,.75);}
-    50%{ box-shadow:0 0 0 7px rgba(181,80,47,0);}
-  }
-  .tile .num{ font-size:clamp(6px,.62vw,10px); opacity:.72; line-height:1;}
-  .tile .sym{ font-size:clamp(11px,1.35vw,21px); font-weight:700; line-height:1; text-align:center;}
-  .tile .mass{ font-size:clamp(5.5px,.55vw,9px); opacity:.68; line-height:1; text-align:right;}
-  .tile-ph{
-    background: repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0 4px, transparent 4px 8px);
-    border:1px dashed rgba(0,0,0,.32);
-    align-items:center; justify-content:center;
-    font-size:clamp(6px,.6vw,9px); color:var(--ink-soft);
-  }
-  #legend{
-    display:flex; flex-wrap:wrap; gap:6px 15px; margin:11px 0 0 22px; padding-top:8px;
-    border-top:1px solid rgba(0,0,0,.22); font-size:clamp(8px,.68vw,11px); color:var(--ink-soft);
-  }
-  #legend span{ display:inline-flex; align-items:center; gap:5px;}
-  #legend i{ width:9px; height:9px; border-radius:2px; display:inline-block; border:1px solid rgba(0,0,0,.3);}
+  #pt-grid{display:grid;grid-template-columns:repeat(18,1fr);gap:clamp(2px,.3vw,5px);margin-left:22px}
+  .tile,.tile-ph{aspect-ratio:1/1;border-radius:2px;position:relative;display:flex;flex-direction:column;
+    justify-content:space-between;padding:3px 4px;font-family:Georgia,serif;color:#1b140c;
+    border:1px solid rgba(0,0,0,.30);overflow:hidden}
+  .tile{cursor:pointer;background:linear-gradient(160deg,rgba(255,255,255,.35),rgba(255,255,255,0) 60%),
+      color-mix(in srgb,var(--cat) 34%,var(--paper));
+    transition:transform .18s cubic-bezier(.3,1.4,.5,1),box-shadow .18s,background .18s,opacity .25s,filter .25s}
+  .tile:hover,.tile:focus-visible{transform:translateY(-3px) scale(1.12);z-index:6;outline:none;
+    box-shadow:0 7px 16px rgba(0,0,0,.4);background:linear-gradient(160deg,rgba(255,255,255,.4),rgba(255,255,255,0) 60%),
+      color-mix(in srgb,var(--cat) 58%,var(--paper))}
+  .tile.dim{opacity:.20;filter:grayscale(.8)}
+  .tile.reactive{box-shadow:0 0 0 2px #2e8f6e,0 0 14px rgba(70,220,170,.65);z-index:4}
+  .tile.chosen{box-shadow:0 0 0 3px #b5502f,0 0 18px rgba(230,120,70,.8);z-index:5;transform:scale(1.14)}
+  .tile.pulse{animation:pulse 1s ease 2}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(181,80,47,.75)}50%{box-shadow:0 0 0 7px rgba(181,80,47,0)}}
+  .tile .num{font-size:clamp(6px,.62vw,10px);opacity:.72;line-height:1}
+  .tile .sym{font-size:clamp(11px,1.35vw,21px);font-weight:700;line-height:1;text-align:center}
+  .tile .mass{font-size:clamp(5.5px,.55vw,9px);opacity:.68;line-height:1;text-align:right}
+  .tile-ph{background:repeating-linear-gradient(45deg,rgba(0,0,0,.05) 0 4px,transparent 4px 8px);
+    border:1px dashed rgba(0,0,0,.32);align-items:center;justify-content:center;font-size:clamp(6px,.6vw,9px);color:var(--ink-soft)}
+  #legend{display:flex;flex-wrap:wrap;gap:6px 15px;margin:11px 0 0 22px;padding-top:8px;border-top:1px solid rgba(0,0,0,.22);
+    font-size:clamp(8px,.68vw,11px);color:var(--ink-soft)}
+  #legend span{display:inline-flex;align-items:center;gap:5px}
+  #legend i{width:9px;height:9px;border-radius:2px;display:inline-block;border:1px solid rgba(0,0,0,.3)}
+  #lab-banner{display:none;margin:9px 0 0 22px;padding:7px 11px;border-radius:5px;background:rgba(46,95,82,.14);
+    border:1px solid rgba(46,95,82,.45);color:#1d3f36;font-size:clamp(9px,.8vw,12.5px);font-style:italic}
+  body.lab #lab-banner{display:block}
 
-  /* ================= PORTAL (zoom transition) ================= */
-  #portal{
-    position:fixed; z-index:60; pointer-events:none;
-    border-radius:2px; display:flex; align-items:center; justify-content:center;
-    font-family:Georgia,serif; font-weight:700; color:#1b140c;
-    opacity:0; will-change: transform, opacity, border-radius;
-  }
-  #portal .glyph{ line-height:1; }
+  /* ============ WARP ============ */
+  #warp{position:fixed;inset:0;z-index:58;pointer-events:none;opacity:0;transition:opacity .25s ease;overflow:hidden}
+  #warp.on{opacity:1}
+  #warp canvas{position:absolute;inset:0;width:100%;height:100%}
+  #scale-ticker{position:absolute;left:50%;bottom:16%;transform:translateX(-50%);text-align:center;
+    font-family:'SF Mono',ui-monospace,Menlo,monospace;color:#bfe4ff;text-shadow:0 0 16px rgba(90,180,255,.8)}
+  #scale-ticker .big{font-size:clamp(26px,6vw,48px);letter-spacing:1px;line-height:1}
+  #scale-ticker .cap{font-size:clamp(10px,2.2vw,13px);opacity:.75;margin-top:7px;letter-spacing:2px;text-transform:uppercase}
 
-  /* ================= ATOM VIEW ================= */
-  #atom-view{
-    position:fixed; inset:0; z-index:50;
-    background: radial-gradient(ellipse 85% 70% at 50% 42%, #16283f 0%, #0a1420 55%, #03070c 100%);
-    opacity:0; pointer-events:none;
-    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
-    transition: opacity .45s ease;
-  }
-  #atom-view.show{ opacity:1; pointer-events:auto; }
-  #atom-view::before{
-    content:""; position:absolute; inset:0; pointer-events:none; opacity:.05;
-    background-image:
-      linear-gradient(rgba(150,205,255,.5) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(150,205,255,.5) 1px, transparent 1px);
-    background-size:52px 52px;
-  }
-  #atom-canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none;}
+  #portal{position:fixed;z-index:59;pointer-events:none;border-radius:2px;display:flex;align-items:center;justify-content:center;
+    font-family:Georgia,serif;font-weight:700;color:#1b140c;opacity:0;will-change:transform,opacity,border-radius}
 
-  #close-btn{
-    position:absolute; top:16px; right:16px; z-index:20;
-    width:44px; height:44px; border-radius:50%;
-    background:rgba(255,255,255,.08); border:1px solid rgba(190,220,255,.4);
-    color:#dff0ff; font-size:19px; cursor:pointer; backdrop-filter:blur(5px);
-    transition:background .2s, transform .25s;
-  }
-  #close-btn:hover{ background:rgba(255,255,255,.2); transform:rotate(90deg);}
+  /* ============ 3D SCENES ============ */
+  .scene3d{position:fixed;inset:0;z-index:50;opacity:0;pointer-events:none;transition:opacity .45s ease;
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif}
+  .scene3d.show{opacity:1;pointer-events:auto}
+  #atom-view{background:radial-gradient(ellipse 85% 70% at 50% 42%,#16283f 0%,#0a1420 55%,#03070c 100%)}
+  #nucleon-view{background:radial-gradient(ellipse 80% 70% at 50% 45%,#3a1c2c 0%,#16101a 55%,#05040a 100%);z-index:52}
+  .scene3d canvas.main{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  .scene3d::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+    background-image:linear-gradient(rgba(150,205,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(150,205,255,.5) 1px,transparent 1px);
+    background-size:52px 52px}
 
-  #zoom-ctl{
-    position:absolute; top:70px; right:16px; z-index:20;
-    display:flex; flex-direction:column; gap:7px;
-  }
-  #zoom-ctl button{
-    width:44px; height:38px; border-radius:9px;
-    background:rgba(255,255,255,.07); border:1px solid rgba(190,220,255,.3);
-    color:#cfe6ff; font-size:15px; cursor:pointer; backdrop-filter:blur(5px);
-    font-family:inherit;
-  }
-  #zoom-ctl button:active{ background:rgba(255,255,255,.2);}
-  #zoom-ctl button.fit{ font-size:10.5px; letter-spacing:.4px;}
+  .close-btn{position:absolute;top:16px;right:16px;z-index:20;width:44px;height:44px;border-radius:50%;
+    background:rgba(255,255,255,.08);border:1px solid rgba(190,220,255,.4);color:#dff0ff;font-size:19px;cursor:pointer;
+    backdrop-filter:blur(5px);transition:background .2s,transform .25s}
+  .close-btn:hover{background:rgba(255,255,255,.2);transform:rotate(90deg)}
+  .zoom-ctl{position:absolute;top:70px;right:16px;z-index:20;display:flex;flex-direction:column;gap:7px}
+  .zoom-ctl button{width:44px;height:38px;border-radius:9px;background:rgba(255,255,255,.07);
+    border:1px solid rgba(190,220,255,.3);color:#cfe6ff;font-size:15px;cursor:pointer;backdrop-filter:blur(5px);font-family:inherit}
+  .zoom-ctl button:active{background:rgba(255,255,255,.2)}
+  .zoom-ctl button.fit{font-size:10.5px;letter-spacing:.4px}
 
-  #shell-label{
-    position:absolute; top:18px; left:16px; z-index:15;
-    font-size:11.5px; color:#8fb3d9; letter-spacing:.3px;
-    background:rgba(8,16,26,.45); padding:7px 11px; border-radius:7px;
-    border:1px solid rgba(150,205,255,.2);
-  }
+  .hud-top{position:absolute;top:18px;left:16px;z-index:15;font-size:11.5px;color:#8fb3d9;letter-spacing:.3px;
+    background:rgba(8,16,26,.45);padding:7px 11px;border-radius:7px;border:1px solid rgba(150,205,255,.2);line-height:1.6}
+  .hud-top b{color:#dff0ff;font-weight:600}
+  #scalebar{margin-top:6px;display:flex;align-items:center;gap:7px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px}
+  #scalebar .bar{width:64px;height:5px;border-left:1px solid #7fd0ff;border-right:1px solid #7fd0ff;border-bottom:1px solid #7fd0ff}
 
-  #info-panel{
-    position:absolute; left:0; bottom:0; z-index:15;
-    width:min(430px,94vw); margin:16px;
-    padding:16px 19px 15px;
-    background:rgba(7,15,25,.68); border:1px solid rgba(150,205,255,.26);
-    border-radius:12px; backdrop-filter:blur(10px); color:#eaf3ff;
-    transform:translateY(16px); opacity:0;
-    transition: transform .55s cubic-bezier(.2,.9,.3,1) .25s, opacity .55s ease .25s;
-  }
-  #atom-view.show #info-panel{ transform:translateY(0); opacity:1;}
-  #info-top{ display:flex; align-items:center; gap:14px; margin-bottom:6px;}
-  #info-sym{ font-family:Georgia,serif; font-size:42px; font-weight:700; color:#fff; text-shadow:0 0 22px rgba(120,190,255,.6); line-height:1;}
-  #info-name{ font-size:18px; font-weight:600;}
-  #info-cat{ font-size:11.5px; color:#9fc3ec; margin-top:2px;}
-  #info-stats{
-    display:grid; grid-template-columns:1fr 1fr; gap:7px 16px;
-    font-size:12.5px; color:#b9d0e7; margin:9px 0; padding:10px 0;
-    border-top:1px solid rgba(150,205,255,.16); border-bottom:1px solid rgba(150,205,255,.16);
-  }
-  #info-stats b{ display:block; color:#fff; font-weight:600; font-size:14px; margin-top:1px;}
-  #info-desc{ font-size:13.5px; line-height:1.5; color:#dbe9f7; font-family:Georgia,serif;}
+  #nucleus-hint{position:absolute;left:50%;top:52%;transform:translate(-50%,0);z-index:14;pointer-events:none;
+    font-size:11.5px;color:#ffd2c0;background:rgba(40,12,8,.5);border:1px solid rgba(255,150,110,.4);
+    padding:5px 10px;border-radius:20px;opacity:0;transition:opacity .5s ease}
+  #nucleus-hint.on{opacity:.95}
+
+  .info-panel{position:absolute;left:0;bottom:0;z-index:15;width:min(448px,94vw);margin:16px;padding:16px 19px 15px;
+    background:rgba(7,15,25,.70);border:1px solid rgba(150,205,255,.26);border-radius:12px;backdrop-filter:blur(10px);
+    color:#eaf3ff;transform:translateY(16px);opacity:0;
+    transition:transform .55s cubic-bezier(.2,.9,.3,1) .25s,opacity .55s ease .25s;max-height:62vh;overflow-y:auto}
+  .show .info-panel{transform:translateY(0);opacity:1}
+  .panel-toggle{position:absolute;top:9px;right:10px;width:34px;height:28px;border-radius:7px;cursor:pointer;
+    background:rgba(255,255,255,.07);border:1px solid rgba(190,220,255,.28);color:#cfe6ff;font-size:12px;
+    font-family:inherit;line-height:1;z-index:3}
+  .panel-toggle:active{background:rgba(255,255,255,.18)}
+  .info-panel.collapsed{padding-bottom:13px}
+  .info-panel.collapsed .stats,.info-panel.collapsed #info-desc,.info-panel.collapsed #lab-cta,
+  .info-panel.collapsed #nuc-desc{display:none}
+  .info-panel.collapsed #info-sym,.info-panel.collapsed #nuc-sym{font-size:27px}
+  .info-panel.collapsed #info-top{margin-bottom:0}
+  #lab-toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,14px);z-index:80;opacity:0;
+    pointer-events:none;background:rgba(20,12,8,.9);color:#ffe2cf;border:1px solid rgba(255,170,130,.4);
+    padding:10px 16px;border-radius:22px;font-family:-apple-system,Arial,sans-serif;font-size:13px;
+    transition:opacity .3s ease,transform .3s ease;max-width:88vw;text-align:center}
+  #lab-toast.on{opacity:1;transform:translate(-50%,0)}
+  #info-top{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  #info-sym{font-family:Georgia,serif;font-size:42px;font-weight:700;color:#fff;text-shadow:0 0 22px rgba(120,190,255,.6);line-height:1}
+  #info-name{font-size:18px;font-weight:600}
+  #info-cat{font-size:11.5px;color:#9fc3ec;margin-top:2px}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px;font-size:12.5px;color:#b9d0e7;margin:9px 0;padding:10px 0;
+    border-top:1px solid rgba(150,205,255,.16);border-bottom:1px solid rgba(150,205,255,.16)}
+  .stats b{display:block;color:#fff;font-weight:600;font-size:14px;margin-top:1px}
+  .stats .wide{grid-column:1/-1}
+  #info-desc{font-size:13.5px;line-height:1.5;color:#dbe9f7;font-family:Georgia,serif}
+  #lab-cta{margin-top:11px;width:100%;padding:9px;border-radius:8px;border:1px solid rgba(90,220,180,.45);
+    background:rgba(40,120,100,.28);color:#c8ffee;font-size:12.5px;cursor:pointer;font-family:inherit}
+  #lab-cta:hover{background:rgba(40,120,100,.5)}
+
+  /* ============ REACTION PANEL ============ */
+  #rx{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;
+    background:rgba(4,10,16,.78);backdrop-filter:blur(7px);font-family:-apple-system,'Helvetica Neue',Arial,sans-serif}
+  #rx.on{display:flex}
+  #rx-card{width:min(560px,94vw);max-height:90vh;overflow-y:auto;background:linear-gradient(180deg,#0e1a27,#0a121c);
+    border:1px solid rgba(150,205,255,.3);border-radius:14px;padding:20px;color:#eaf3ff;
+    box-shadow:0 30px 80px rgba(0,0,0,.7)}
+  #rx-card h2{margin:0 0 3px;font-size:19px;font-family:Georgia,serif}
+  #rx-sub{font-size:12px;color:#8fb3d9;margin-bottom:14px}
+  #rx-stage{height:150px;position:relative;border-radius:10px;background:radial-gradient(ellipse at 50% 50%,#13273c,#080f18);
+    border:1px solid rgba(150,205,255,.18);overflow:hidden;margin-bottom:14px}
+  .rxatom{position:absolute;top:50%;width:74px;height:74px;margin-top:-37px;border-radius:50%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:Georgia,serif;color:#12202e;font-weight:700;transition:all 1.1s cubic-bezier(.6,0,.3,1)}
+  .rxatom .s{font-size:25px;line-height:1}
+  .rxatom .c{font-size:11px;opacity:.8;margin-top:2px}
+  #rxa{left:16%;margin-left:-37px}
+  #rxb{left:84%;margin-left:-37px}
+  #rx-stage.go #rxa{left:44%;transform:scale(.86)}
+  #rx-stage.go #rxb{left:56%;transform:scale(.86)}
+  #rx-elec{position:absolute;top:50%;left:16%;width:13px;height:13px;margin:-6px 0 0 -6px;border-radius:50%;
+    background:#8fe6ff;box-shadow:0 0 14px #4fc8ff;opacity:0;transition:all 1s ease}
+  #rx-stage.go #rx-elec{left:84%;opacity:1}
+  #rx-stage.done #rx-elec{opacity:0}
+  #rx-product{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:Georgia,serif;font-size:36px;color:#fff;opacity:0;transition:opacity .6s ease;text-shadow:0 0 26px rgba(120,220,255,.7)}
+  #rx-stage.done #rx-product{opacity:1}
+  #rx-stage.done .rxatom{opacity:0;transform:scale(.4)}
+  #rx-eq{font-family:ui-monospace,Menlo,monospace;font-size:15px;background:rgba(255,255,255,.05);
+    padding:10px 12px;border-radius:8px;border:1px solid rgba(150,205,255,.16);margin-bottom:12px;text-align:center}
+  #rx-body{font-size:13.5px;line-height:1.55;font-family:Georgia,serif;color:#dbe9f7}
+  #rx-tags{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 0}
+  #rx-tags span{font-size:11px;padding:4px 9px;border-radius:20px;background:rgba(90,180,255,.14);
+    border:1px solid rgba(150,205,255,.3);color:#bcdcff}
+  #rx-close{margin-top:16px;width:100%;padding:11px;border-radius:9px;border:1px solid rgba(190,220,255,.35);
+    background:rgba(255,255,255,.07);color:#dff0ff;font-size:13px;cursor:pointer;font-family:inherit}
+  #rx-close:hover{background:rgba(255,255,255,.16)}
 
   @media (max-width:760px){
-    #table-wrap{ width:99vw;}
-    .tile .num,.tile .mass{ display:none;}
-    .tile .sym{ font-size:clamp(9px,2.4vw,15px);}
-    .hole{ display:none;}
-    .pt-head,#pt-grid,#legend{ margin-left:0; padding-left:0;}
-    #info-panel{ width:96vw; margin:9px; padding:13px 15px;}
-    #info-sym{ font-size:33px;}
-    #info-stats{ font-size:11.5px;}
-    #legend{ gap:4px 10px;}
+    #table-wrap{width:99vw}
+    .tile .num,.tile .mass{display:none}
+    .tile .sym{font-size:clamp(9px,2.4vw,15px)}
+    .hole{display:none}
+    .pt-head,#pt-grid,#legend,#lab-banner{margin-left:0;padding-left:0}
+    .info-panel{width:96vw;margin:9px;padding:13px 15px;max-height:54vh}
+    #info-sym{font-size:33px}
+    .stats{font-size:11.5px}
+    #legend{gap:4px 10px}
+    .pt-head{flex-direction:column;align-items:stretch;gap:7px}
+    #tools{justify-content:flex-start}
   }
-  @media (prefers-reduced-motion: reduce){
-    #table-wrap,#atom-view,.tile,#portal{ transition:none !important;}
-  }
+  @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms !important}}
 </style>
 </head>
 <body>
 
 <div id="desk">
   <div id="table-wrap">
+    <div class="under u2"></div>
+    <div class="under u1"></div>
     <div id="paper">
       <div class="hole h1"></div><div class="hole h2"></div><div class="hole h3"></div>
       <div class="pt-head">
         <div>
           <h1>Elemental</h1>
-          <p>tap any element to look inside the atom</p>
+          <p id="subtitle">tap any element to fall into its atom</p>
         </div>
-        <div id="search-row">
+        <div id="tools">
           <input id="search-input" type="text" placeholder="find an element…" autocomplete="off">
           <button id="search-btn">Go</button>
+          <button id="lab-btn" class="ghost">Reaction lab</button>
         </div>
       </div>
       <div id="pt-grid"></div>
+      <div id="lab-banner">Pick a starting element. Anything it reacts with will light up green.</div>
       <div id="legend"></div>
     </div>
   </div>
@@ -286,34 +247,79 @@
   <div id="vignette"></div>
 </div>
 
+<div id="warp">
+  <canvas id="warp-canvas"></canvas>
+  <div id="scale-ticker"><div class="big"></div><div class="cap"></div></div>
+</div>
 <div id="portal"><span class="glyph"></span></div>
+<div id="lab-toast"></div>
 
-<div id="atom-view">
-  <canvas id="atom-canvas"></canvas>
-  <div id="shell-label"></div>
-  <button id="close-btn" aria-label="Back to the table">✕</button>
-  <div id="zoom-ctl">
-    <button id="zin" aria-label="Zoom in">＋</button>
-    <button id="zout" aria-label="Zoom out">－</button>
-    <button id="zfit" class="fit" aria-label="Fit all shells">FIT</button>
+<!-- ATOM -->
+<div id="atom-view" class="scene3d">
+  <canvas id="atom-canvas" class="main"></canvas>
+  <div class="hud-top">
+    <div id="shell-label"></div>
+    <div id="scalebar"><div class="bar"></div><span id="scaletext"></span></div>
   </div>
-  <div id="info-panel">
+  <div id="nucleus-hint">tap the nucleus to go deeper</div>
+  <button class="close-btn" id="atom-close" aria-label="Back to the table">✕</button>
+  <div class="zoom-ctl">
+    <button id="zin">＋</button><button id="zout">－</button><button id="zfit" class="fit">FIT</button>
+  </div>
+  <div class="info-panel" id="atom-panel">
+    <button class="panel-toggle" id="atom-toggle" aria-label="Collapse details">▾</button>
     <div id="info-top">
       <div id="info-sym"></div>
-      <div>
-        <div id="info-name"></div>
-        <div id="info-cat"></div>
-      </div>
+      <div><div id="info-name"></div><div id="info-cat"></div></div>
     </div>
-    <div id="info-stats"></div>
+    <div class="stats" id="info-stats"></div>
     <div id="info-desc"></div>
+    <button id="lab-cta">See what this reacts with →</button>
+  </div>
+</div>
+
+<!-- NUCLEON -->
+<div id="nucleon-view" class="scene3d">
+  <canvas id="nuc-canvas" class="main"></canvas>
+  <div class="hud-top">
+    <div id="nuc-label"></div>
+    <div id="nucscalebar"><div class="bar" style="border-color:#ffab8f"></div><span id="nucscaletext"></span></div>
+  </div>
+  <button class="close-btn" id="nuc-close" aria-label="Back to the atom">✕</button>
+  <div class="zoom-ctl">
+    <button id="nzin">＋</button><button id="nzout">－</button><button id="nzfit" class="fit">FIT</button>
+  </div>
+  <div class="info-panel" id="nuc-panel">
+    <button class="panel-toggle" id="nuc-toggle" aria-label="Collapse details">▾</button>
+    <div id="info-top"><div id="nuc-sym"></div><div><div id="nuc-name"></div><div id="nuc-cat"></div></div></div>
+    <div class="stats" id="nuc-stats"></div>
+    <div id="nuc-desc"></div>
+  </div>
+</div>
+
+<!-- REACTION -->
+<div id="rx">
+  <div id="rx-card">
+    <h2 id="rx-title"></h2>
+    <div id="rx-sub"></div>
+    <div id="rx-stage">
+      <div class="rxatom" id="rxa"><span class="s"></span><span class="c"></span></div>
+      <div class="rxatom" id="rxb"><span class="s"></span><span class="c"></span></div>
+      <div id="rx-elec"></div>
+      <div id="rx-product"></div>
+    </div>
+    <div id="rx-eq"></div>
+    <div id="rx-body"></div>
+    <div id="rx-tags"></div>
+    <button id="rx-close">Back to the table</button>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-/* ===================== DATA ===================== */
-const ELEMENTS = [
+"use strict";
+/* ================= ELEMENT DATA ================= */
+const ELEMENTS=[
 [1,"H","Hydrogen",1.0,[1],1,1,"Hydrogen is the simplest and most abundant element in the universe, fuelling stars through nuclear fusion."],
 [2,"He","Helium",4.0,[2],1,18,"Helium is a light, inert noble gas famous for filling balloons and cooling superconducting magnets."],
 [3,"Li","Lithium",6.9,[2,1],2,1,"Lithium is a soft, lightweight alkali metal at the heart of modern rechargeable batteries."],
@@ -431,386 +437,746 @@ const ELEMENTS = [
 [115,"Mc","Moscovium",290,[2,8,18,32,32,18,5],7,15,"Moscovium is a synthetic superheavy element named after the Moscow region of Russia."],
 [116,"Lv","Livermorium",293,[2,8,18,32,32,18,6],7,16,"Livermorium is a synthetic superheavy element named after Lawrence Livermore National Laboratory."],
 [117,"Ts","Tennessine",294,[2,8,18,32,32,18,7],7,17,"Tennessine is a synthetic superheavy halogen named after the state of Tennessee."],
-[118,"Og","Oganesson",294,[2,8,18,32,32,18,8],7,18,"Oganesson is the heaviest known element, a synthetic noble gas named after physicist Yuri Oganessian."]
-];
+[118,"Og","Oganesson",294,[2,8,18,32,32,18,8],7,18,"Oganesson is the heaviest known element, a synthetic noble gas named after physicist Yuri Oganessian."]];
+
+/* state at room temp + electronegativity (Pauling). null = unknown/predicted */
+const PROP={
+H:["g",2.20],He:["g",null],Li:["s",0.98],Be:["s",1.57],B:["s",2.04],C:["s",2.55],N:["g",3.04],O:["g",3.44],F:["g",3.98],Ne:["g",null],
+Na:["s",0.93],Mg:["s",1.31],Al:["s",1.61],Si:["s",1.90],P:["s",2.19],S:["s",2.58],Cl:["g",3.16],Ar:["g",null],K:["s",0.82],Ca:["s",1.00],
+Sc:["s",1.36],Ti:["s",1.54],V:["s",1.63],Cr:["s",1.66],Mn:["s",1.55],Fe:["s",1.83],Co:["s",1.88],Ni:["s",1.91],Cu:["s",1.90],Zn:["s",1.65],
+Ga:["s",1.81],Ge:["s",2.01],As:["s",2.18],Se:["s",2.55],Br:["l",2.96],Kr:["g",3.00],Rb:["s",0.82],Sr:["s",0.95],Y:["s",1.22],Zr:["s",1.33],
+Nb:["s",1.60],Mo:["s",2.16],Tc:["s",1.90],Ru:["s",2.20],Rh:["s",2.28],Pd:["s",2.20],Ag:["s",1.93],Cd:["s",1.69],In:["s",1.78],Sn:["s",1.96],
+Sb:["s",2.05],Te:["s",2.10],I:["s",2.66],Xe:["g",2.60],Cs:["s",0.79],Ba:["s",0.89],La:["s",1.10],Ce:["s",1.12],Pr:["s",1.13],Nd:["s",1.14],
+Pm:["s",1.13],Sm:["s",1.17],Eu:["s",1.20],Gd:["s",1.20],Tb:["s",1.10],Dy:["s",1.22],Ho:["s",1.23],Er:["s",1.24],Tm:["s",1.25],Yb:["s",1.10],
+Lu:["s",1.27],Hf:["s",1.30],Ta:["s",1.50],W:["s",2.36],Re:["s",1.90],Os:["s",2.20],Ir:["s",2.20],Pt:["s",2.28],Au:["s",2.54],Hg:["l",2.00],
+Tl:["s",1.62],Pb:["s",2.33],Bi:["s",2.02],Po:["s",2.00],At:["s",2.20],Rn:["g",null],Fr:["s",0.70],Ra:["s",0.90],Ac:["s",1.10],Th:["s",1.30],
+Pa:["s",1.50],U:["s",1.38],Np:["s",1.36],Pu:["s",1.28],Am:["s",1.30],Cm:["s",1.30],Bk:["s",1.30],Cf:["s",1.30],Es:["s",1.30],Fm:["s",1.30],
+Md:["s",1.30],No:["s",1.30],Lr:["s",null],Rf:["s",null],Db:["s",null],Sg:["s",null],Bh:["s",null],Hs:["s",null],Mt:["s",null],Ds:["s",null],
+Rg:["s",null],Cn:["s",null],Nh:["s",null],Fl:["s",null],Mc:["s",null],Lv:["s",null],Ts:["s",null],Og:["s",null]};
+
+/* common ion charges for elements that don't follow the simple column rule */
+const CHARGE_OVERRIDE={
+H:[1,-1],Sc:[3],Ti:[4,3],V:[5,4,3,2],Cr:[3,2],Mn:[2,4,7],Fe:[3,2],Co:[2,3],Ni:[2,3],Cu:[2,1],Zn:[2],
+Y:[3],Zr:[4],Nb:[5,3],Mo:[6,4],Tc:[7],Ru:[3,4],Rh:[3],Pd:[2,4],Ag:[1],Cd:[2],
+Hf:[4],Ta:[5],W:[6,4],Re:[7,4],Os:[4],Ir:[4,3],Pt:[4,2],Au:[3,1],Hg:[2,1],
+Sn:[2,4],Pb:[2,4],Tl:[1,3],Bi:[3,5],Po:[2,4],
+La:[3],Ce:[3,4],Pr:[3],Nd:[3],Pm:[3],Sm:[3],Eu:[3,2],Gd:[3],Tb:[3],Dy:[3],Ho:[3],Er:[3],Tm:[3],Yb:[3],Lu:[3],
+Ac:[3],Th:[4],Pa:[5],U:[6,4],Np:[5],Pu:[4],Am:[3],Cm:[3],Bk:[3],Cf:[3],Es:[3],Fm:[3],Md:[3],No:[3],Lr:[3],
+He:[],Ne:[],Ar:[],Kr:[2],Xe:[2,4,6],Rn:[2],Og:[],
+C:[4,-4],Si:[4,-4],Ge:[4,2],B:[3],As:[-3,3,5],Sb:[3,5],Te:[-2,4,6],At:[-1],
+Rf:[4],Db:[5],Sg:[6],Bh:[7],Hs:[4],Mt:[3],Ds:[4],Rg:[3],Cn:[2],Nh:[1],Fl:[2],Mc:[3],Lv:[2],Ts:[-1]};
+
+/* anion stems for naming */
+const ANION_STEM={F:"fluor",Cl:"chlor",Br:"brom",I:"iod",At:"astat",Ts:"tenness",O:"ox",S:"sulf",Se:"selen",Te:"tellur",
+N:"nitr",P:"phosph",As:"arsen",C:"carb",Si:"silic",H:"hydr",B:"bor"};
+const ROMAN={1:"I",2:"II",3:"III",4:"IV",5:"V",6:"VI",7:"VII"};
+const PREFIX=["","mono","di","tri","tetra","penta","hexa","hepta","octa","nona","deca"];
 
 function range(a,b){const r=[];for(let i=a;i<=b;i++)r.push(i);return r;}
-const CATS = {
-  alkali:[3,11,19,37,55,87], alkaline:[4,12,20,38,56,88],
-  lanthanide:range(57,71), actinide:range(89,103),
+const CATS={alkali:[3,11,19,37,55,87],alkaline:[4,12,20,38,56,88],lanthanide:range(57,71),actinide:range(89,103),
   transition:[...range(21,30),...range(39,48),...range(72,80),...range(104,112)],
-  metalloid:[5,14,32,33,51,52,85],
-  post:[13,31,49,50,81,82,83,84,113,114,115,116],
-  halogen:[9,17,35,53,117], noble:[2,10,18,36,54,86,118],
-  nonmetal:[1,6,7,8,15,16,34]
-};
-const CAT_LABEL={alkali:"Alkali metal",alkaline:"Alkaline earth metal",lanthanide:"Lanthanide",actinide:"Actinide",transition:"Transition metal",metalloid:"Metalloid",post:"Post-transition metal",halogen:"Halogen",noble:"Noble gas",nonmetal:"Reactive nonmetal"};
-const CAT_VAR={alkali:"--cat-alkali",alkaline:"--cat-alkaline",lanthanide:"--cat-lanth",actinide:"--cat-actin",transition:"--cat-transition",metalloid:"--cat-metalloid",post:"--cat-post",halogen:"--cat-halogen",noble:"--cat-noble",nonmetal:"--cat-nonmetal"};
-function categoryOf(n){ for(const k in CATS) if(CATS[k].includes(n)) return k; return "nonmetal"; }
-const SHELL_NAMES = ["K","L","M","N","O","P","Q"];
+  metalloid:[5,14,32,33,51,52,85],post:[13,31,49,50,81,82,83,84,113,114,115,116],
+  halogen:[9,17,35,53,117],noble:[2,10,18,36,54,86,118],nonmetal:[1,6,7,8,15,16,34]};
+const CAT_LABEL={alkali:"Alkali metal",alkaline:"Alkaline earth metal",lanthanide:"Lanthanide",actinide:"Actinide",
+  transition:"Transition metal",metalloid:"Metalloid",post:"Post-transition metal",halogen:"Halogen",
+  noble:"Noble gas",nonmetal:"Reactive nonmetal"};
+const CAT_VAR={alkali:"--cat-alkali",alkaline:"--cat-alkaline",lanthanide:"--cat-lanth",actinide:"--cat-actin",
+  transition:"--cat-transition",metalloid:"--cat-metalloid",post:"--cat-post",halogen:"--cat-halogen",
+  noble:"--cat-noble",nonmetal:"--cat-nonmetal"};
+const SHELL_NAMES=["K","L","M","N","O","P","Q"];
+const METAL_CATS=["alkali","alkaline","transition","post","lanthanide","actinide"];
+function categoryOf(n){for(const k in CATS) if(CATS[k].includes(n)) return k; return "nonmetal";}
 
-/* ===================== BUILD TABLE ===================== */
-const grid=document.getElementById('pt-grid');
-[{row:6,col:3,label:"57–71"},{row:7,col:3,label:"89–103"}].forEach(p=>{
-  const d=document.createElement('div'); d.className='tile-ph';
-  d.style.gridRow=p.row; d.style.gridColumn=p.col; d.textContent=p.label;
-  grid.appendChild(d);
-});
-const els={};
+/* ---- build element records ---- */
+const BY_SYM={},BY_N={},ALL=[];
 ELEMENTS.forEach(e=>{
   const [n,sym,name,mass,shells,row,col,desc]=e;
   const cat=categoryOf(n);
-  const data={n,sym,name,mass,shells,row,col,desc,cat};
-  els[sym.toLowerCase()]=data; els[n]=data;
+  const p=PROP[sym]||["s",null];
+  let charges;
+  if(CHARGE_OVERRIDE[sym]) charges=CHARGE_OVERRIDE[sym].slice();
+  else if(col===1)charges=[1]; else if(col===2)charges=[2]; else if(col===13)charges=[3];
+  else if(col===14)charges=[4,-4]; else if(col===15)charges=[-3]; else if(col===16)charges=[-2];
+  else if(col===17)charges=[-1]; else if(col===18)charges=[]; else charges=[3];
+  const period = row<=7?row:(row===9?6:7);
+  const group = (row>=9)?null:col;
+  const valence = shells[shells.length-1];
+  const d={n,sym,name,mass,shells,row,col,desc,cat,state:p[0],en:p[1],charges,period,group,valence,
+           isMetal:METAL_CATS.includes(cat),isNoble:cat==="noble"};
+  BY_SYM[sym]=d; BY_SYM[sym.toLowerCase()]=d; BY_N[n]=d; ALL.push(d);
+});
+function config(d){ return d.shells.map((c,i)=>`${SHELL_NAMES[i]||i+1}${c}`).join(" "); }
+function stateWord(s){ return s==="g"?"Gas":s==="l"?"Liquid":"Solid"; }
+function chargeText(d){ return d.charges.length? d.charges.map(c=>(c>0?"+":"")+c).join(", ") : "none (inert)"; }
+
+/* ================= TABLE UI ================= */
+const grid=document.getElementById('pt-grid');
+[{row:6,col:3,label:"57–71"},{row:7,col:3,label:"89–103"}].forEach(p=>{
+  const d=document.createElement('div');d.className='tile-ph';
+  d.style.gridRow=p.row;d.style.gridColumn=p.col;d.textContent=p.label;grid.appendChild(d);
+});
+const tiles={};
+ALL.forEach(d=>{
   const t=document.createElement('button');
-  t.className='tile'; t.style.gridRow=row; t.style.gridColumn=col;
-  t.style.setProperty('--cat',`var(${CAT_VAR[cat]})`);
-  t.dataset.sym=sym; t.setAttribute('aria-label',name);
-  t.innerHTML=`<div class="num">${n}</div><div class="sym">${sym}</div><div class="mass">${mass}</div>`;
-  t.addEventListener('click',()=>openElement(data,t));
-  grid.appendChild(t);
+  t.className='tile';t.style.gridRow=d.row;t.style.gridColumn=d.col;
+  t.style.setProperty('--cat',`var(${CAT_VAR[d.cat]})`);
+  t.dataset.sym=d.sym;t.title=d.name;t.setAttribute('aria-label',d.name);
+  t.innerHTML=`<div class="num">${d.n}</div><div class="sym">${d.sym}</div><div class="mass">${d.mass}</div>`;
+  t.addEventListener('click',()=>onTile(d,t));
+  grid.appendChild(t);tiles[d.sym]=t;
 });
 const legend=document.getElementById('legend');
 Object.keys(CAT_LABEL).forEach(k=>{
   const s=document.createElement('span');
-  s.innerHTML=`<i style="background:var(${CAT_VAR[k]})"></i>${CAT_LABEL[k]}`;
-  legend.appendChild(s);
+  s.innerHTML=`<i style="background:var(${CAT_VAR[k]})"></i>${CAT_LABEL[k]}`;legend.appendChild(s);
 });
-
-/* search */
-document.getElementById('search-btn').addEventListener('click',doSearch);
+document.getElementById('search-btn').onclick=doSearch;
 document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 function doSearch(){
-  const q=document.getElementById('search-input').value.trim().toLowerCase();
-  if(!q) return;
-  let found=els[q]||null;
-  if(!found) for(const k in els){ if(els[k].name.toLowerCase()===q){found=els[k];break;} }
-  if(!found) for(const k in els){ if(els[k].name.toLowerCase().startsWith(q)){found=els[k];break;} }
-  if(found){
-    const tile=grid.querySelector(`.tile[data-sym="${found.sym}"]`);
-    tile.classList.add('pulse'); setTimeout(()=>tile.classList.remove('pulse'),2000);
-    openElement(found,tile);
-  }
+  const q=document.getElementById('search-input').value.trim().toLowerCase();if(!q)return;
+  let f=BY_SYM[q]||BY_N[parseInt(q,10)]||null;
+  if(!f) f=ALL.find(d=>d.name.toLowerCase()===q)||ALL.find(d=>d.name.toLowerCase().startsWith(q));
+  if(f){const t=tiles[f.sym];t.classList.add('pulse');setTimeout(()=>t.classList.remove('pulse'),2000);onTile(f,t);}
 }
 
-/* ===================== ZOOM TRANSITION ===================== */
+/* ================= LAB MODE ================= */
+let labMode=false, labA=null;
+const labBtn=document.getElementById('lab-btn');
+labBtn.onclick=()=>setLab(!labMode);
+function setLab(on,preselect){
+  labMode=on; labA=null;
+  document.body.classList.toggle('lab',on);
+  labBtn.classList.toggle('on',on);
+  labBtn.textContent=on?"Exit lab":"Reaction lab";
+  document.getElementById('subtitle').textContent=on?"reaction lab":"tap any element to fall into its atom";
+  clearHighlights();
+  document.getElementById('lab-banner').textContent="Pick a starting element. Anything it reacts with will light up green.";
+  if(on&&preselect) chooseA(preselect);
+}
+function clearHighlights(){ ALL.forEach(d=>tiles[d.sym].classList.remove('dim','reactive','chosen')); }
+function chooseA(d){
+  labA=d; clearHighlights();
+  const partners=ALL.filter(x=>reactionOf(d,x));
+  ALL.forEach(x=>{
+    const t=tiles[x.sym];
+    if(x===d) t.classList.add('chosen');
+    else if(partners.includes(x)) t.classList.add('reactive');
+    else t.classList.add('dim');
+  });
+  const b=document.getElementById('lab-banner');
+  b.textContent = partners.length
+    ? `${d.name} — ${partners.length} partners lit up. Tap one to run the reaction. Tap ${d.sym} again to reset.`
+    : `${d.name} is essentially unreactive under ordinary conditions. Tap it again to pick something else.`;
+}
+let toastT=null;
+function toast(msg){
+  const el=document.getElementById('lab-toast');
+  el.textContent=msg; el.classList.add('on');
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),2600);
+}
+function onTile(d,t){
+  if(labMode){
+    if(!labA){ chooseA(d); return; }
+    if(d===labA){ labA=null; clearHighlights();
+      document.getElementById('lab-banner').textContent="Pick a starting element. Anything it reacts with will light up green."; return; }
+    const rx=reactionOf(labA,d);
+    if(rx) showReaction(rx);
+    else toast(`${labA.name} and ${d.name} don't form a simple compound under ordinary conditions.`);
+    return;
+  }
+  openElement(d,t);
+}
+
+/* ---- reaction engine ---- */
+function gcd(a,b){return b?gcd(b,a%b):a;}
+function posCharge(d){ const p=d.charges.filter(c=>c>0); return p.length?Math.max(...p):null; }
+function negCharge(d){ const n=d.charges.filter(c=>c<0); return n.length?Math.min(...n):null; }
+function sub(n){ return n===1?"":String(n).replace(/[0-9]/g,c=>"₀₁₂₃₄₅₆₇₈₉"[+c]); }
+
+const CURATED={
+"H|O":{f:"H₂O",name:"Water",body:"Two hydrogen atoms each share their single electron with one oxygen atom, which needs two more to fill its outer shell. The result is water — a bent molecule whose lopsided charge gives it the surface tension, high boiling point and solvent power that life depends on. Burning hydrogen in oxygen releases a large amount of energy, which is why it works as rocket fuel.",tags:["covalent","exothermic","everyday"]},
+"Na|Cl":{f:"NaCl",name:"Sodium chloride (table salt)",body:"Sodium gives away its single outer electron and chlorine takes it, so both end up with full shells. The resulting Na⁺ and Cl⁻ ions snap together into a cubic crystal lattice. The reaction itself is violent — a lump of sodium dropped into chlorine gas burns with a bright orange flame — but the product is the salt on your dinner table.",tags:["ionic","violent","everyday"]},
+"Fe|O":{f:"Fe₂O₃",name:"Iron(III) oxide (rust)",body:"Iron loses three electrons to oxygen, forming the reddish-brown oxide we call rust. Unlike aluminum's oxide, rust flakes off instead of sealing the surface, so the metal underneath keeps corroding. Given enough moisture, an iron beam will eventually rust all the way through.",tags:["ionic","slow","corrosion"]},
+"H|Cl":{f:"HCl",name:"Hydrogen chloride",body:"Hydrogen and chlorine share a pair of electrons, but chlorine pulls much harder, leaving the molecule strongly polar. Dissolved in water it becomes hydrochloric acid — the same acid your stomach uses to break down food. A mixture of the two gases will explode if exposed to bright light.",tags:["covalent","acid","light-sensitive"]},
+"C|O":{f:"CO₂",name:"Carbon dioxide",body:"Carbon forms double bonds to two oxygen atoms, giving a straight, symmetrical molecule. It's the product of every combustion and every breath you take, it makes soda fizzy, and its ability to trap infrared radiation makes it the central greenhouse gas in climate science.",tags:["covalent","combustion","greenhouse gas"]},
+"N|H":{f:"NH₃",name:"Ammonia",body:"Nitrogen shares electrons with three hydrogens, keeping one lone pair that gives ammonia its pyramid shape and its sharp smell. Manufacturing it from air via the Haber process is how the world makes fertilizer — roughly half the nitrogen in your body passed through that reaction.",tags:["covalent","fertilizer","industrial"]},
+"C|H":{f:"CH₄",name:"Methane",body:"Carbon's four outer electrons pair with four hydrogens, producing a perfect tetrahedron. Methane is the main component of natural gas and the simplest hydrocarbon — the starting point for the entire field of organic chemistry.",tags:["covalent","fuel","organic"]},
+"Mg|O":{f:"MgO",name:"Magnesium oxide",body:"Magnesium gives up two electrons and oxygen takes exactly two, so the ions pair one-to-one. Burning magnesium ribbon produces a blinding white light hot enough to be used in early flash photography, leaving behind a white powder of magnesium oxide.",tags:["ionic","bright flame","classic demo"]},
+"Ca|O":{f:"CaO",name:"Calcium oxide (quicklime)",body:"Calcium hands over two electrons to oxygen. The product, quicklime, reacts vigorously with water, releasing enough heat to boil it — a property used in self-heating cans and in making cement and mortar.",tags:["ionic","exothermic","construction"]},
+"K|Cl":{f:"KCl",name:"Potassium chloride",body:"Potassium's lone outer electron transfers to chlorine. The result is a salt that tastes faintly bitter and is sold as a low-sodium salt substitute, as well as being a major potassium fertilizer.",tags:["ionic","everyday"]},
+"Na|O":{f:"Na₂O",name:"Sodium oxide",body:"Two sodium atoms each give up one electron to satisfy oxygen's need for two. Sodium oxide reacts eagerly with water to form sodium hydroxide, a strong base — which is why sodium metal is stored under oil rather than left in air.",tags:["ionic","reactive"]},
+"Al|O":{f:"Al₂O₃",name:"Aluminum oxide",body:"Each aluminum atom loses three electrons and each oxygen gains two, giving the 2:3 ratio. Unlike rust, this oxide forms a tough, transparent skin that seals the metal beneath — the reason aluminum cans and window frames don't corrode away. In gemstone form it's sapphire and ruby.",tags:["ionic","protective","gemstone"]},
+"H|S":{f:"H₂S",name:"Hydrogen sulfide",body:"Sulfur sits directly below oxygen, so it bonds to two hydrogens just as oxygen does — but the resulting molecule is a toxic gas rather than a liquid. It's the smell of rotten eggs, and it deadens your sense of smell at dangerous concentrations.",tags:["covalent","toxic","smelly"]},
+"Cu|O":{f:"CuO",name:"Copper(II) oxide",body:"Copper loses two electrons to oxygen, forming a black powder. Heat a copper wire in a flame and it blackens instantly. Over decades in open air, copper instead weathers to the green patina seen on the Statue of Liberty.",tags:["ionic","patina"]},
+"Zn|S":{f:"ZnS",name:"Zinc sulfide",body:"Zinc gives two electrons and sulfur takes two. Zinc sulfide glows when struck by radiation, which made it the phosphor in old glow-in-the-dark paints and in the screen Rutherford's team watched to discover the atomic nucleus.",tags:["ionic","phosphorescent","historic"]},
+"Li|O":{f:"Li₂O",name:"Lithium oxide",body:"Two lithium atoms each surrender one electron to a single oxygen. Lithium is the only alkali metal that also reacts directly with nitrogen in air, and its compounds are central to modern battery chemistry.",tags:["ionic","battery chemistry"]},
+"Ag|Cl":{f:"AgCl",name:"Silver chloride",body:"Silver's single available electron transfers to chlorine. The product is nearly insoluble in water and darkens on exposure to light as the silver ions are reduced back to metal — the effect that made photographic film work.",tags:["ionic","light-sensitive","photography"]},
+"Pb|S":{f:"PbS",name:"Lead(II) sulfide (galena)",body:"Lead gives up two electrons to sulfur, producing shiny grey cubic crystals. Galena is the main ore of lead and was used as the detector crystal in early 'cat's whisker' crystal radios.",tags:["ionic","mineral","historic"]},
+"F|Xe":{f:"XeF₄",name:"Xenon tetrafluoride",body:"Noble gases were thought completely inert until 1962. Fluorine is aggressive enough to force xenon into bonding, producing stable colourless crystals — a result that rewrote a rule chemists had believed for sixty years.",tags:["covalent","rule-breaking","1962"]},
+"Ti|O":{f:"TiO₂",name:"Titanium dioxide",body:"Titanium loses four electrons and each oxygen takes two. The white powder that results is the brightest white pigment known and is in nearly all white paint, sunscreen and toothpaste.",tags:["ionic","pigment","everyday"]},
+"N|O":{f:"NO₂",name:"Nitrogen dioxide",body:"Nitrogen and oxygen only combine at the high temperatures inside engines and lightning strikes. The reddish-brown gas that forms is a major component of smog and a precursor to acid rain.",tags:["covalent","pollution","high energy"]},
+"S|O":{f:"SO₂",name:"Sulfur dioxide",body:"Burning sulfur-bearing fuel gives this sharp, choking gas. Dissolved in atmospheric moisture it becomes sulfurous acid, the main driver of acid rain, which is why modern fuels are desulfurized.",tags:["covalent","acid rain","combustion"]}
+};
+
+function reactionOf(a,b){
+  if(a===b) return null;
+  if(a.isNoble&&b.isNoble) return null;
+  // noble gases: only Xe/Kr with F (or O)
+  const nobleOk=(x,y)=> !x.isNoble || (["Xe","Kr","Rn"].includes(x.sym)&&["F","O","Cl"].includes(y.sym));
+  if(!nobleOk(a,b)||!nobleOk(b,a)) return null;
+  if(a.isMetal&&b.isMetal) return null;              // alloys, not compounds
+  if(a.en==null||b.en==null) return null;            // unknown → skip
+  if(Math.abs(a.en-b.en)<0.10 && !a.isMetal && !b.isMetal) return null;
+
+  // decide who is cation (lower electronegativity)
+  const cation = a.en<=b.en ? a : b;
+  const anion  = a.en<=b.en ? b : a;
+  const pc=posCharge(cation), nc=negCharge(anion);
+  if(pc==null||nc==null) return null;
+  if(!ANION_STEM[anion.sym]) return null;
+
+  const an=Math.abs(nc);
+  const g=gcd(pc,an);
+  const nCat=an/g, nAn=pc/g;
+  const formula=`${cation.sym}${sub(nCat)}${anion.sym}${sub(nAn)}`;
+  const ionic = cation.isMetal;
+
+  let name;
+  if(ionic){
+    const multi=cation.charges.filter(c=>c>0).length>1;
+    name=`${cation.name}${multi?`(${ROMAN[pc]||pc})`:""} ${ANION_STEM[anion.sym]}ide`;
+  } else {
+    const p1=nCat>1?PREFIX[nCat]:"";
+    name=`${p1}${p1?cation.name.toLowerCase():cation.name} ${PREFIX[nAn]||""}${ANION_STEM[anion.sym]}ide`;
+  }
+  const key=`${cation.sym}|${anion.sym}`, key2=`${anion.sym}|${cation.sym}`;
+  const cur=CURATED[key]||CURATED[key2]||null;
+
+  return {
+    a:cation,b:anion,ionic,pc,nc,
+    formula: cur?cur.f:formula,
+    name: cur?cur.name:name.charAt(0).toUpperCase()+name.slice(1),
+    body: cur?cur.body:genericBody(cation,anion,ionic,pc,an,cur?cur.f:formula),
+    tags: cur?cur.tags:[ionic?"ionic":"covalent", ionic?"electron transfer":"shared electrons", `ΔEN ${Math.abs(a.en-b.en).toFixed(2)}`],
+    nCat,nAn
+  };
+}
+function supCharge(q){
+  const map={"1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷"};
+  const n=Math.abs(q), d=n>1?String(n).replace(/[0-9]/g,c=>map[c]||c):"";
+  return d+(q>0?"⁺":"⁻");
+}
+function genericBody(c,an,ionic,pc,ac,formula){
+  if(ionic){
+    return `${c.name} holds ${pc} loosely-bound outer electron${pc>1?"s":""}, and ${an.name} needs ${ac} to complete its outer shell. `+
+      `Electrons move from ${c.sym} to ${an.sym}, producing ${c.sym}${supCharge(pc)} and ${an.sym}${supCharge(-ac)} ions that lock together by electrostatic attraction. `+
+      `The balanced formula ${formula} comes from matching the total positive and negative charge.`;
+  }
+  return `${c.name} and ${an.name} are both nonmetals, so neither can strip electrons from the other. `+
+    `Instead they share pairs — ${c.sym} contributing ${pc} bonding electron${pc>1?"s":""} and each ${an.sym} accepting a share of ${ac}. `+
+    `The result, ${formula}, is a discrete molecule rather than a crystal lattice.`;
+}
+
+function showReaction(rx){
+  document.getElementById('rx-title').textContent=rx.name;
+  document.getElementById('rx-sub').textContent=`${rx.a.name} + ${rx.b.name} — ${rx.ionic?"ionic bond (electrons transferred)":"covalent bond (electrons shared)"}`;
+  const A=document.getElementById('rxa'),B=document.getElementById('rxb');
+  A.style.background=getComputedStyle(document.documentElement).getPropertyValue(CAT_VAR[rx.a.cat]);
+  B.style.background=getComputedStyle(document.documentElement).getPropertyValue(CAT_VAR[rx.b.cat]);
+  A.querySelector('.s').textContent=rx.a.sym; B.querySelector('.s').textContent=rx.b.sym;
+  A.querySelector('.c').textContent=(rx.pc>0?"+":"")+rx.pc; B.querySelector('.c').textContent=rx.nc;
+  document.getElementById('rx-product').textContent=rx.formula;
+  const lhs=`${rx.nCat>1?rx.nCat:""}${rx.a.sym} + ${rx.nAn>1?rx.nAn:""}${rx.b.sym}`;
+  document.getElementById('rx-eq').textContent=`${lhs}  →  ${rx.formula}`;
+  document.getElementById('rx-body').textContent=rx.body;
+  const tg=document.getElementById('rx-tags');tg.innerHTML="";
+  rx.tags.forEach(t=>{const s=document.createElement('span');s.textContent=t;tg.appendChild(s);});
+  const stage=document.getElementById('rx-stage');
+  stage.classList.remove('go','done');
+  document.getElementById('rx').classList.add('on');
+  setTimeout(()=>stage.classList.add('go'),120);
+  setTimeout(()=>stage.classList.add('done'),1350);
+}
+document.getElementById('rx-close').onclick=()=>document.getElementById('rx').classList.remove('on');
+document.getElementById('rx').addEventListener('click',e=>{ if(e.target.id==='rx') document.getElementById('rx').classList.remove('on'); });
+document.getElementById('lab-cta').onclick=()=>{ const d=currentData; closeAtom(); setTimeout(()=>setLab(true,d),700); };
+
+/* ================= WARP TRANSITION ================= */
 const tableWrap=document.getElementById('table-wrap');
 const atomView=document.getElementById('atom-view');
-const portal=document.getElementById('portal');
-const portalGlyph=portal.querySelector('.glyph');
-let busy=false, currentData=null, lastTile=null;
+const nucView=document.getElementById('nucleon-view');
+const portal=document.getElementById('portal'),portalGlyph=portal.querySelector('.glyph');
+const warp=document.getElementById('warp'),warpCanvas=document.getElementById('warp-canvas');
+const tickBig=document.querySelector('#scale-ticker .big'),tickCap=document.querySelector('#scale-ticker .cap');
+let wctx,wstreaks=[],wraf=null;
 
-function catColor(cat){
-  return getComputedStyle(document.documentElement).getPropertyValue(CAT_VAR[cat]).trim();
+const SCALE_STEPS=[
+ ["30 cm","a sheet of paper"],["1 cm","a fingernail"],["1 mm","a grain of sand"],
+ ["100 µm","a human hair"],["10 µm","a red blood cell"],["1 µm","a bacterium"],
+ ["100 nm","a virus"],["10 nm","a protein"],["1 nm","a DNA strand"],["100 pm","one atom"]
+];
+const NUC_STEPS=[["100 pm","one atom"],["1 pm","inside the shells"],["100 fm","closing on the nucleus"],["1 fm","a single proton"]];
+
+function initWarp(){
+  wctx=warpCanvas.getContext('2d');
+  const r=()=>{warpCanvas.width=innerWidth*devicePixelRatio;warpCanvas.height=innerHeight*devicePixelRatio;
+    wctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);};
+  r();addEventListener('resize',r);
+}
+function runWarp(steps,dur,hue){
+  if(!wctx) initWarp();
+  warp.classList.add('on');
+  wstreaks=[];
+  for(let i=0;i<180;i++){
+    wstreaks.push({a:Math.random()*Math.PI*2,r:Math.random()*Math.min(innerWidth,innerHeight)*0.5,
+      v:0.6+Math.random()*2.6,len:14+Math.random()*90,w:0.5+Math.random()*1.6,o:0.15+Math.random()*0.6});
+  }
+  const t0=performance.now();
+  cancelAnimationFrame(wraf);
+  const cx=innerWidth/2,cy=innerHeight/2;
+  const step=()=>{
+    const t=(performance.now()-t0)/dur;
+    wctx.clearRect(0,0,innerWidth,innerHeight);
+    const fade = t<0.15? t/0.15 : (t>0.82? Math.max(0,(1-t)/0.18) : 1);
+    wctx.lineCap='round';
+    wstreaks.forEach(s=>{
+      s.r += s.v*(6+t*46);
+      if(s.r>Math.hypot(cx,cy)+120){ s.r=Math.random()*40; }
+      const x1=cx+Math.cos(s.a)*s.r, y1=cy+Math.sin(s.a)*s.r;
+      const l=s.len*(0.4+t*2.2);
+      const x2=cx+Math.cos(s.a)*(s.r-l), y2=cy+Math.sin(s.a)*(s.r-l);
+      wctx.strokeStyle=`hsla(${hue},95%,${62+Math.random()*10}%,${s.o*fade})`;
+      wctx.lineWidth=s.w;
+      wctx.beginPath();wctx.moveTo(x1,y1);wctx.lineTo(x2,y2);wctx.stroke();
+    });
+    const idx=Math.min(steps.length-1,Math.floor(t*steps.length));
+    tickBig.textContent=steps[idx][0];
+    tickCap.textContent=steps[idx][1];
+    tickBig.style.opacity=tickCap.style.opacity=fade;
+    if(t<1) wraf=requestAnimationFrame(step);
+    else { warp.classList.remove('on'); wctx.clearRect(0,0,innerWidth,innerHeight); }
+  };
+  wraf=requestAnimationFrame(step);
 }
 
-function openElement(data,tileEl){
-  if(busy) return;
-  busy=true; currentData=data; lastTile=tileEl;
+/* ================= OPEN / CLOSE ================= */
+let currentData=null, lock=0;
+function guard(ms){ const now=Date.now(); if(now<lock) return false; lock=now+ms; return true; }
+function catColor(cat){ return getComputedStyle(document.documentElement).getPropertyValue(CAT_VAR[cat]).trim(); }
 
-  const r=tileEl.getBoundingClientRect();
-  const vw=innerWidth, vh=innerHeight;
+function openElement(d,tileEl){
+  if(!guard(420)) return;
+  currentData=d;
+  const r=tileEl.getBoundingClientRect(), vw=innerWidth, vh=innerHeight;
   const cx=r.left+r.width/2, cy=r.top+r.height/2;
 
-  // 1. table dollies toward the clicked tile, blurs out
   tableWrap.style.transformOrigin=`${(cx/vw)*100}% ${(cy/vh)*100}%`;
-  requestAnimationFrame(()=>{
-    tableWrap.style.transform='scale(3.4)';
-    tableWrap.classList.add('receding');
-  });
+  requestAnimationFrame(()=>{ tableWrap.style.transform='scale(4.2)'; tableWrap.classList.add('receding'); });
 
-  // 2. portal: the tile itself detaches, flies to centre, swells into a glowing orb
-  const col=catColor(data.cat);
+  const col=catColor(d.cat);
   portal.style.transition='none';
-  portal.style.left=r.left+'px'; portal.style.top=r.top+'px';
-  portal.style.width=r.width+'px'; portal.style.height=r.height+'px';
-  portal.style.background=`radial-gradient(circle at 42% 38%, ${col}, ${col} 45%, rgba(10,22,38,1) 130%)`;
-  portal.style.borderRadius='2px';
-  portal.style.transform='translate(0,0) scale(1)';
-  portal.style.opacity='1';
-  portalGlyph.textContent=data.sym;
-  portalGlyph.style.fontSize=Math.max(9,r.width*0.55)+'px';
-  portalGlyph.style.opacity='1';
-  portalGlyph.style.transition='none';
-
-  const target=Math.max(vw,vh)*1.5;
-  const scale=target/r.width;
-
+  portal.style.left=r.left+'px';portal.style.top=r.top+'px';
+  portal.style.width=r.width+'px';portal.style.height=r.height+'px';
+  portal.style.background=`radial-gradient(circle at 42% 38%,${col},${col} 45%,rgba(10,22,38,1) 130%)`;
+  portal.style.borderRadius='2px';portal.style.transform='translate(0,0) scale(1)';portal.style.opacity='1';
+  portalGlyph.textContent=d.sym;portalGlyph.style.fontSize=Math.max(9,r.width*0.55)+'px';
+  portalGlyph.style.opacity='1';portalGlyph.style.transition='none';portalGlyph.style.transform='scale(1)';
+  const scale=Math.max(vw,vh)*1.6/r.width;
   requestAnimationFrame(()=>{
-    portal.style.transition='transform .9s cubic-bezier(.66,0,.28,1), opacity .35s ease .62s, border-radius .55s ease';
-    portalGlyph.style.transition='opacity .3s ease .05s, transform .9s cubic-bezier(.66,0,.28,1)';
+    portal.style.transition='transform 1.05s cubic-bezier(.62,0,.25,1),opacity .4s ease .7s,border-radius .6s ease';
+    portalGlyph.style.transition='opacity .32s ease .04s,transform 1.05s cubic-bezier(.62,0,.25,1)';
     portal.style.borderRadius='50%';
-    portal.style.transform=
-      `translate(${vw/2-cx}px, ${vh/2-cy}px) scale(${scale})`;
-    portalGlyph.style.opacity='0';
-    portalGlyph.style.transform='scale(.4)';
+    portal.style.transform=`translate(${vw/2-cx}px,${vh/2-cy}px) scale(${scale})`;
+    portalGlyph.style.opacity='0';portalGlyph.style.transform='scale(.35)';
     portal.style.opacity='0';
   });
+  runWarp(SCALE_STEPS,1500,205);
 
-  // 3. atom view fades up beneath the swelling orb, shells bloom outward
   setTimeout(()=>{
-    buildAtom(data);
+    try{ buildAtom(d); }catch(err){ console.error(err); }
     atomView.classList.add('show');
-  }, 560);
-  setTimeout(()=>{ busy=false; }, 1000);
+    const hint=document.getElementById('nucleus-hint');
+    hint.classList.add('on'); setTimeout(()=>hint.classList.remove('on'),4200);
+  },900);
 }
-
-document.getElementById('close-btn').addEventListener('click',closeElement);
-function closeElement(){
-  if(busy) return;
-  busy=true;
-  collapseAtom();
+document.getElementById('atom-close').onclick=closeAtom;
+function closeAtom(){
+  if(!guard(420)) return;
+  collapsing=true; setTimeout(()=>collapsing=false,700);
   atomView.classList.remove('show');
-  setTimeout(()=>{
-    tableWrap.classList.remove('receding');
-    tableWrap.style.transform='scale(1)';
-    setTimeout(()=>{ busy=false; }, 1000);
-  }, 260);
+  setTimeout(()=>{ tableWrap.classList.remove('receding'); tableWrap.style.transform='none'; },240);
 }
-addEventListener('keydown',e=>{ if(e.key==='Escape' && atomView.classList.contains('show')) closeElement(); });
+addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  if(document.getElementById('rx').classList.contains('on')) document.getElementById('rx').classList.remove('on');
+  else if(nucView.classList.contains('show')) closeNuc();
+  else if(atomView.classList.contains('show')) closeAtom();
+});
 
-/* ===================== THREE.JS ATOM ===================== */
-let renderer,scene,camera,root,rafId;
-let rotY=0.5, rotX=-0.18, autoRot=true, dragging=false, lastX=0,lastY=0;
-let dist=14, targetDist=14, fitDist=14, minDist=2, maxDist=90;
-let shells=[], bloomTime=0, nucleusGroup=null;
-let glowTex=null;
+/* ---- collapsible panels ---- */
+let atomCollapsed=false, nucCollapsed=false;
+function wirePanel(btnId,panelId,get,set){
+  const btn=document.getElementById(btnId),panel=document.getElementById(panelId);
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    set(!get());
+    panel.classList.toggle('collapsed',get());
+    btn.textContent=get()?"▴":"▾";
+    btn.setAttribute('aria-label',get()?"Show details":"Collapse details");
+  });
+}
+wirePanel('atom-toggle','atom-panel',()=>atomCollapsed,v=>atomCollapsed=v);
+wirePanel('nuc-toggle','nuc-panel',()=>nucCollapsed,v=>nucCollapsed=v);
+function panelWorldOffset(cam,d,panelId){
+  if(innerWidth>=760) return 0;
+  const p=document.getElementById(panelId);
+  if(!p||p.classList.contains('collapsed')) return 0;
+  const vF=cam.fov*Math.PI/180;
+  const unitsPerPx=(2*Math.tan(vF/2)*d)/innerHeight;
+  return (p.getBoundingClientRect().height*0.5)*unitsPerPx;
+}
 
-function makeGlowTexture(){
-  const c=document.createElement('canvas'); c.width=c.height=128;
-  const g=c.getContext('2d');
-  const grd=g.createRadialGradient(64,64,0,64,64,64);
-  grd.addColorStop(0,'rgba(255,255,255,1)');
-  grd.addColorStop(0.22,'rgba(160,220,255,0.75)');
-  grd.addColorStop(0.55,'rgba(90,160,255,0.22)');
+/* ================= THREE: ATOM ================= */
+let renderer,scene,camera,root,glowTex;
+let rotY=.5,rotX=-.18,autoRot=true,dragging=false,lastX=0,lastY=0;
+let dist=14,targetDist=14,fitDist=14,minDist=2,maxDist=90;
+let shells=[],bloom=0,nucleusGroup=null,nucHit=null,collapsing=false,outerRadius=10;
+let raycaster,pointerNDC;
+
+function makeGlow(c1,c2){
+  const c=document.createElement('canvas');c.width=c.height=128;
+  const g=c.getContext('2d');const grd=g.createRadialGradient(64,64,0,64,64,64);
+  grd.addColorStop(0,'rgba(255,255,255,1)');grd.addColorStop(.22,c1);grd.addColorStop(.55,c2);
   grd.addColorStop(1,'rgba(40,90,200,0)');
-  g.fillStyle=grd; g.fillRect(0,0,128,128);
-  return new THREE.CanvasTexture(c);
+  g.fillStyle=grd;g.fillRect(0,0,128,128);return new THREE.CanvasTexture(c);
 }
-
-function initThree(){
+function initAtom(){
   const canvas=document.getElementById('atom-canvas');
   renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   scene=new THREE.Scene();
-  camera=new THREE.PerspectiveCamera(42,1,0.1,600);
-  glowTex=makeGlowTexture();
-
-  scene.add(new THREE.AmbientLight(0x93b4d6,0.7));
-  const k=new THREE.PointLight(0xcfe8ff,1.25,0); k.position.set(9,12,14); scene.add(k);
-  const f=new THREE.PointLight(0xff8b62,0.55,0); f.position.set(-13,-8,-10); scene.add(f);
-  const r=new THREE.DirectionalLight(0x6fa8ff,0.45); r.position.set(-6,4,-9); scene.add(r);
-
-  // starfield for depth
-  const sGeo=new THREE.BufferGeometry();
-  const pts=[];
-  for(let i=0;i<420;i++){
-    const rad=90+Math.random()*180;
-    const th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
-    pts.push(rad*Math.sin(ph)*Math.cos(th), rad*Math.sin(ph)*Math.sin(th), rad*Math.cos(ph));
-  }
-  sGeo.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
-  scene.add(new THREE.Points(sGeo,new THREE.PointsMaterial({color:0x8fbfe8,size:0.9,transparent:true,opacity:0.5})));
-
-  resize(); addEventListener('resize',resize);
-  setupControls(canvas);
-  loop();
+  camera=new THREE.PerspectiveCamera(42,1,.1,600);
+  glowTex=makeGlow('rgba(160,220,255,.75)','rgba(90,160,255,.22)');
+  raycaster=new THREE.Raycaster(); pointerNDC=new THREE.Vector2();
+  scene.add(new THREE.AmbientLight(0x93b4d6,.7));
+  const k=new THREE.PointLight(0xcfe8ff,1.25);k.position.set(9,12,14);scene.add(k);
+  const f=new THREE.PointLight(0xff8b62,.55);f.position.set(-13,-8,-10);scene.add(f);
+  scene.add(starfield(0x8fbfe8));
+  resizeAtom();addEventListener('resize',resizeAtom);
+  controls(canvas,
+    v=>{targetDist=clamp(v,minDist,maxDist)},()=>targetDist,
+    (dx,dy)=>{rotY+=dx*.0065;rotX=clamp(rotX+dy*.0065,-1.35,1.35);autoRot=false;},
+    e=>tryNucleusTap(e));
+  document.getElementById('zin').onclick=()=>targetDist=clamp(targetDist*.78,minDist,maxDist);
+  document.getElementById('zout').onclick=()=>targetDist=clamp(targetDist*1.28,minDist,maxDist);
+  document.getElementById('zfit').onclick=()=>{targetDist=fitDist;rotX=-.18;autoRot=true;};
+  loopAtom();
 }
-function resize(){
-  if(!renderer) return;
-  const w=innerWidth,h=innerHeight;
-  renderer.setSize(w,h);
-  camera.aspect=w/h; camera.updateProjectionMatrix();
-  if(currentData) computeFit();
+function starfield(col){
+  const g=new THREE.BufferGeometry(),p=[];
+  for(let i=0;i<420;i++){const rad=90+Math.random()*180,th=Math.random()*6.28,ph=Math.acos(2*Math.random()-1);
+    p.push(rad*Math.sin(ph)*Math.cos(th),rad*Math.sin(ph)*Math.sin(th),rad*Math.cos(ph));}
+  g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
+  return new THREE.Points(g,new THREE.PointsMaterial({color:col,size:.9,transparent:true,opacity:.5}));
 }
-
-function setupControls(canvas){
-  const pointers=new Map();
-  let pinchStart=0, pinchDist0=0;
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function resizeAtom(){
+  if(!renderer)return;
+  renderer.setSize(innerWidth,innerHeight);
+  camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+  if(currentData)computeFit();
+}
+function controls(canvas,setD,getD,onDrag,onTap){
+  const pts=new Map();let pd0=0,d0=0,moved=0,downT=0;
   canvas.addEventListener('pointerdown',e=>{
-    canvas.setPointerCapture(e.pointerId);
-    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-    if(pointers.size===1){ dragging=true; autoRot=false; lastX=e.clientX; lastY=e.clientY; }
-    if(pointers.size===2){ dragging=false; pinchDist0=pDist(pointers); pinchStart=targetDist; }
+    canvas.setPointerCapture(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===1){dragging=true;lastX=e.clientX;lastY=e.clientY;moved=0;downT=Date.now();}
+    if(pts.size===2){dragging=false;pd0=pdist(pts);d0=getD();}
   });
   canvas.addEventListener('pointermove',e=>{
-    if(!pointers.has(e.pointerId)) return;
-    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-    if(pointers.size===2 && pinchDist0>0){
-      const d=pDist(pointers);
-      targetDist=clamp(pinchStart*(pinchDist0/d),minDist,maxDist);
-      return;
-    }
-    if(dragging){
-      rotY+=(e.clientX-lastX)*0.0065;
-      rotX=clamp(rotX+(e.clientY-lastY)*0.0065,-1.35,1.35);
-      lastX=e.clientX; lastY=e.clientY;
-    }
+    if(!pts.has(e.pointerId))return;
+    pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2&&pd0>0){setD(d0*(pd0/pdist(pts)));return;}
+    if(dragging){const dx=e.clientX-lastX,dy=e.clientY-lastY;moved+=Math.abs(dx)+Math.abs(dy);
+      onDrag(dx,dy);lastX=e.clientX;lastY=e.clientY;}
   });
-  const end=e=>{ pointers.delete(e.pointerId); if(pointers.size<2) pinchDist0=0; if(pointers.size===0) dragging=false; };
-  canvas.addEventListener('pointerup',end);
-  canvas.addEventListener('pointercancel',end);
-  canvas.addEventListener('wheel',e=>{
-    e.preventDefault();
-    targetDist=clamp(targetDist*(1+e.deltaY*0.0012),minDist,maxDist);
-  },{passive:false});
-
-  document.getElementById('zin').onclick =()=> targetDist=clamp(targetDist*0.78,minDist,maxDist);
-  document.getElementById('zout').onclick=()=> targetDist=clamp(targetDist*1.28,minDist,maxDist);
-  document.getElementById('zfit').onclick=()=>{ targetDist=fitDist; rotX=-0.18; autoRot=true; };
-}
-function pDist(m){ const a=[...m.values()]; return Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y); }
-function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
-
-function disposeRoot(){
-  if(!root) return;
-  scene.remove(root);
-  root.traverse(o=>{
-    if(o.geometry) o.geometry.dispose();
-    if(o.material){ Array.isArray(o.material)?o.material.forEach(m=>m.dispose()):o.material.dispose(); }
-  });
-}
-
-let outerRadius=10;
-function computeFit(){
-  const vFov=camera.fov*Math.PI/180;
-  const needV=outerRadius/Math.tan(vFov/2);
-  const hFov=2*Math.atan(Math.tan(vFov/2)*camera.aspect);
-  const needH=outerRadius/Math.tan(hFov/2);
-  // panel occupies the lower ~third on phones, so pad more when narrow
-  const pad = innerWidth<760 ? 1.55 : 1.30;
-  fitDist=clamp(Math.max(needV,needH)*pad, 4, maxDist);
-  minDist=Math.max(1.5, outerRadius*0.12);
-  maxDist=fitDist*4.5;
-}
-
-function buildAtom(data){
-  if(!renderer) initThree();
-  disposeRoot();
-  root=new THREE.Group(); scene.add(root);
-  shells=[]; bloomTime=0;
-  rotY=0.5; rotX=-0.18; autoRot=true;
-
-  const protons=data.n;
-  const neutrons=Math.max(0,Math.round(data.mass)-data.n);
-  const total=protons+neutrons;
-
-  /* --- nucleus --- */
-  nucleusGroup=new THREE.Group();
-  const coreR = 0.42 + Math.cbrt(total)*0.20;
-  const nucGeo=new THREE.SphereGeometry(0.19,10,10);
-  const pMat=new THREE.MeshStandardMaterial({color:0xff6b5e,roughness:.34,metalness:.12,emissive:0x5a1208,emissiveIntensity:.45});
-  const nMat=new THREE.MeshStandardMaterial({color:0xc3ccd8,roughness:.42,metalness:.2,emissive:0x141922,emissiveIntensity:.3});
-  const cap=300, k=total>cap?cap/total:1;
-  const pN=Math.max(1,Math.round(protons*k)), nN=Math.max(0,Math.round(neutrons*k));
-  const pMesh=new THREE.InstancedMesh(nucGeo,pMat,pN);
-  const nMesh=new THREE.InstancedMesh(nucGeo,nMat,nN);
-  const dum=new THREE.Object3D();
-  const pt=()=>{
-    const th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
-    const rr=coreR*Math.cbrt(Math.random());
-    return new THREE.Vector3(rr*Math.sin(ph)*Math.cos(th),rr*Math.sin(ph)*Math.sin(th),rr*Math.cos(ph));
+  const end=e=>{
+    if(pts.size===1&&moved<7&&Date.now()-downT<400&&onTap) onTap(e);
+    pts.delete(e.pointerId);if(pts.size<2)pd0=0;if(!pts.size)dragging=false;
   };
-  for(let i=0;i<pN;i++){ dum.position.copy(pt()); dum.rotation.set(Math.random()*3,Math.random()*3,0); dum.updateMatrix(); pMesh.setMatrixAt(i,dum.matrix); }
-  for(let i=0;i<nN;i++){ dum.position.copy(pt()); dum.rotation.set(Math.random()*3,Math.random()*3,0); dum.updateMatrix(); nMesh.setMatrixAt(i,dum.matrix); }
-  nucleusGroup.add(pMesh,nMesh);
+  canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',e=>{pts.delete(e.pointerId);dragging=false;});
+  canvas.addEventListener('wheel',e=>{e.preventDefault();setD(getD()*(1+e.deltaY*.0012));},{passive:false});
+}
+function pdist(m){const a=[...m.values()];return Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);}
 
-  // nucleus halo
-  const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xffb08a,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false}));
-  halo.scale.setScalar(coreR*6.2);
-  nucleusGroup.add(halo);
+function disposeGroup(g){
+  if(!g)return;scene.remove(g);
+  g.traverse(o=>{if(o.geometry)o.geometry.dispose();
+    if(o.material){Array.isArray(o.material)?o.material.forEach(m=>m.dispose()):o.material.dispose();}});
+}
+function computeFit(){
+  const vF=camera.fov*Math.PI/180;
+  const hF=2*Math.atan(Math.tan(vF/2)*camera.aspect);
+  const pad=innerWidth<760?1.45:1.32;
+  fitDist=clamp(Math.max(outerRadius/Math.tan(vF/2),outerRadius/Math.tan(hF/2))*pad,4,400);
+  minDist=Math.max(1.2,outerRadius*.10);maxDist=fitDist*5;
+}
+function buildAtom(d){
+  if(!renderer)initAtom();
+  disposeGroup(root);
+  root=new THREE.Group();scene.add(root);
+  shells=[];bloom=0;rotY=.5;rotX=-.18;autoRot=true;collapsing=false;
+
+  const protons=d.n,neutrons=Math.max(0,Math.round(d.mass)-d.n),total=protons+neutrons;
+  nucleusGroup=new THREE.Group();
+  const coreR=.42+Math.cbrt(total)*.20;
+  const ng=new THREE.SphereGeometry(.19,10,10);
+  const pM=new THREE.MeshStandardMaterial({color:0xff6b5e,roughness:.34,metalness:.12,emissive:0x5a1208,emissiveIntensity:.45});
+  const nM=new THREE.MeshStandardMaterial({color:0xc3ccd8,roughness:.42,metalness:.2,emissive:0x141922,emissiveIntensity:.3});
+  const cap=300,k=total>cap?cap/total:1;
+  const pN=Math.max(1,Math.round(protons*k)),nN=Math.max(1,Math.round(neutrons*k));
+  const pI=new THREE.InstancedMesh(ng,pM,pN),nI=new THREE.InstancedMesh(ng,nM,nN);
+  const dum=new THREE.Object3D();
+  const rp=()=>{const th=Math.random()*6.283,ph=Math.acos(2*Math.random()-1),rr=coreR*Math.cbrt(Math.random());
+    return new THREE.Vector3(rr*Math.sin(ph)*Math.cos(th),rr*Math.sin(ph)*Math.sin(th),rr*Math.cos(ph));};
+  for(let i=0;i<pN;i++){dum.position.copy(rp());dum.updateMatrix();pI.setMatrixAt(i,dum.matrix);}
+  for(let i=0;i<nN;i++){dum.position.copy(rp());dum.updateMatrix();nI.setMatrixAt(i,dum.matrix);}
+  if(neutrons===0) nI.count=0;
+  nucleusGroup.add(pI,nI);
+  const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xffb08a,transparent:true,opacity:.5,
+    blending:THREE.AdditiveBlending,depthWrite:false}));
+  halo.scale.setScalar(coreR*6.2);nucleusGroup.add(halo);
+  nucHit=new THREE.Mesh(new THREE.SphereGeometry(coreR*1.5,12,12),
+    new THREE.MeshBasicMaterial({visible:false}));
+  nucHit.name="NUCLEUS";nucleusGroup.add(nucHit);
   root.add(nucleusGroup);
 
-  /* --- shells --- */
-  const gap = 1.35;
-  const eR  = 0.17;
-  data.shells.forEach((count,i)=>{
-    const radius = coreR + 1.9 + i*gap*(1 + i*0.06);
+  const gap=1.35;
+  d.shells.forEach((count,i)=>{
+    const radius=coreR+1.9+i*gap*(1+i*.06);
     const pivot=new THREE.Group();
-    pivot.rotation.x = 0.30 + i*0.44;
-    pivot.rotation.z = i*0.37;
-    root.add(pivot);
-
-    // orbit ring — two-tone for depth
-    const ring=new THREE.Mesh(
-      new THREE.RingGeometry(radius-0.012,radius+0.012,140),
-      new THREE.MeshBasicMaterial({color:0x7fd0ff,transparent:true,opacity:0.30,side:THREE.DoubleSide,depthWrite:false})
-    );
-    ring.rotation.x=Math.PI/2; pivot.add(ring);
-
-    const eGroup=new THREE.Group();
-    const eGeo=new THREE.SphereGeometry(eR,14,14);
-    const eMat=new THREE.MeshStandardMaterial({color:0xaef0ff,emissive:0x3aaeff,emissiveIntensity:1.5,roughness:.25,metalness:.1});
-    const glowMat=new THREE.SpriteMaterial({map:glowTex,color:0x74d2ff,transparent:true,opacity:.75,blending:THREE.AdditiveBlending,depthWrite:false});
+    pivot.rotation.x=.30+i*.44;pivot.rotation.z=i*.37;root.add(pivot);
+    const ring=new THREE.Mesh(new THREE.RingGeometry(radius-.012,radius+.012,140),
+      new THREE.MeshBasicMaterial({color:0x7fd0ff,transparent:true,opacity:.3,side:THREE.DoubleSide,depthWrite:false}));
+    ring.rotation.x=Math.PI/2;pivot.add(ring);
+    const eG=new THREE.Group(),eGeo=new THREE.SphereGeometry(.17,14,14);
+    const eM=new THREE.MeshStandardMaterial({color:0xaef0ff,emissive:0x3aaeff,emissiveIntensity:1.5,roughness:.25});
+    const gM=new THREE.SpriteMaterial({map:glowTex,color:0x74d2ff,transparent:true,opacity:.7,
+      blending:THREE.AdditiveBlending,depthWrite:false});
     for(let e=0;e<count;e++){
-      const ang=(e/count)*Math.PI*2;
-      const holder=new THREE.Group();
-      const s=new THREE.Mesh(eGeo,eMat);
-      const g=new THREE.Sprite(glowMat.clone());
-      g.scale.setScalar(eR*7);
-      holder.add(s,g);
-      holder.position.set(Math.cos(ang)*radius,0,Math.sin(ang)*radius);
-      eGroup.add(holder);
+      const a=(e/count)*6.283,h=new THREE.Group();
+      const s=new THREE.Mesh(eGeo,eM),gl=new THREE.Sprite(gM.clone());gl.scale.setScalar(1.2);
+      h.add(s,gl);h.position.set(Math.cos(a)*radius,0,Math.sin(a)*radius);eG.add(h);
     }
-    pivot.add(eGroup);
-
-    const speed = 0.55/Math.pow(i+1,0.9) * (i%2===0?1:-1);
-    shells.push({pivot,eGroup,ring,speed,radius,count,delay:i*0.09});
-    pivot.scale.setScalar(0.001); // bloom in
+    pivot.add(eG);pivot.scale.setScalar(.001);
+    shells.push({pivot,eG,ring,speed:.55/Math.pow(i+1,.9)*(i%2?-1:1),radius,delay:i*.09});
   });
+  outerRadius=shells.length?shells[shells.length-1].radius*1.06:coreR*3;
+  computeFit();dist=fitDist*2.9;targetDist=fitDist;camera.position.set(0,0,dist);
 
-  outerRadius = shells.length ? shells[shells.length-1].radius*1.06 : coreR*3;
-  computeFit();
-  dist = fitDist*2.6; targetDist = fitDist;   // pull-in on entry
-  camera.position.set(0,0,dist);
-
-  /* --- HUD --- */
-  document.getElementById('info-sym').textContent=data.sym;
-  document.getElementById('info-name').textContent=`${data.name} — #${data.n}`;
-  document.getElementById('info-cat').textContent=CAT_LABEL[data.cat];
+  // HUD
+  document.getElementById('info-sym').textContent=d.sym;
+  document.getElementById('info-name').textContent=`${d.name} — #${d.n}`;
+  document.getElementById('info-cat').textContent=CAT_LABEL[d.cat];
   document.getElementById('info-stats').innerHTML=`
-    <div>Atomic mass<b>${data.mass}</b></div>
-    <div>Protons<b>${protons}</b></div>
+    <div>Atomic mass<b>${d.mass}</b></div>
+    <div>State at 25 °C<b>${stateWord(d.state)}</b></div>
+    <div>Protons / Electrons<b>${protons}</b></div>
     <div>Neutrons (approx.)<b>${neutrons}</b></div>
-    <div>Electrons<b>${protons}</b></div>`;
-  document.getElementById('info-desc').textContent=data.desc;
-  const named=data.shells.map((c,i)=>`${SHELL_NAMES[i]||i+1}:${c}`).join('  ');
-  document.getElementById('shell-label').textContent=`shells  ${named}`;
+    <div>Group / Period<b>${d.group?d.group:"—"} / ${d.period}</b></div>
+    <div>Valence electrons<b>${d.valence}</b></div>
+    <div>Common ion charge<b>${chargeText(d)}</b></div>
+    <div>Electronegativity<b>${d.en!=null?d.en.toFixed(2):"—"}</b></div>
+    <div class="wide">Shell configuration<b>${config(d)}</b></div>`;
+  document.getElementById('info-desc').textContent=d.desc;
+  document.getElementById('shell-label').innerHTML=`<b>${d.name}</b> · shells ${d.shells.join("–")}`;
+}
+function tryNucleusTap(e){
+  if(!nucHit)return;
+  pointerNDC.x=(e.clientX/innerWidth)*2-1;
+  pointerNDC.y=-(e.clientY/innerHeight)*2+1;
+  raycaster.setFromCamera(pointerNDC,camera);
+  const hits=raycaster.intersectObject(nucHit,true);
+  if(hits.length) openNucleon();
 }
 
-let collapsing=false;
-function collapseAtom(){ collapsing=true; setTimeout(()=>collapsing=false,700); }
-
-function loop(){
-  rafId=requestAnimationFrame(loop);
-  if(!scene) return;
-  const dt=0.016;
-
+/* real-scale readout: outer shell ≈ 150 pm */
+function updateScaleBar(){
+  const pmPerUnit=150/outerRadius;
+  const vF=camera.fov*Math.PI/180;
+  const widthUnits=2*Math.tan(vF/2)*dist*camera.aspect;
+  const barUnits=widthUnits*(64/innerWidth);
+  const pm=barUnits*pmPerUnit;
+  let txt;
+  if(pm>=1000) txt=(pm/1000).toFixed(2)+" nm";
+  else if(pm>=1) txt=pm.toFixed(0)+" pm";
+  else txt=(pm*1000).toFixed(0)+" fm";
+  document.getElementById('scaletext').textContent=txt;
+}
+function loopAtom(){
+  requestAnimationFrame(loopAtom);
+  if(!scene)return;
+  const dt=.016;
   if(root){
-    bloomTime+=dt;
-    shells.forEach((s,i)=>{
-      const t=clamp((bloomTime-s.delay)/0.55,0,1);
-      const e=1-Math.pow(1-t,3);           // easeOutCubic
-      const target=collapsing?0.001:e;
-      s.pivot.scale.setScalar(s.pivot.scale.x + (target-s.pivot.scale.x)*0.22);
-      s.eGroup.rotation.y += s.speed*dt;
-      s.ring.material.opacity = 0.30*e;
+    bloom+=dt;
+    shells.forEach(s=>{
+      const t=clamp((bloom-s.delay)/.55,0,1),e=1-Math.pow(1-t,3);
+      const tgt=collapsing?.001:e;
+      s.pivot.scale.setScalar(s.pivot.scale.x+(tgt-s.pivot.scale.x)*.22);
+      s.eG.rotation.y+=s.speed*dt;s.ring.material.opacity=.3*e;
     });
     if(nucleusGroup){
-      const ns=collapsing?0.001:1;
-      nucleusGroup.scale.setScalar(nucleusGroup.scale.x+(ns-nucleusGroup.scale.x)*0.2);
-      nucleusGroup.rotation.y += dt*0.32;
-      nucleusGroup.rotation.x += dt*0.14;
+      const ns=collapsing?.001:1;
+      nucleusGroup.scale.setScalar(nucleusGroup.scale.x+(ns-nucleusGroup.scale.x)*.2);
+      nucleusGroup.rotation.y+=dt*.32;nucleusGroup.rotation.x+=dt*.14;
     }
-    if(autoRot) rotY += dt*0.13;
-    root.rotation.y += (rotY-root.rotation.y)*0.12;
-    root.rotation.x += (rotX-root.rotation.x)*0.12;
+    if(autoRot)rotY+=dt*.13;
+    root.rotation.y+=(rotY-root.rotation.y)*.12;
+    root.rotation.x+=(rotX-root.rotation.x)*.12;
   }
-
-  dist += (targetDist-dist)*0.085;
-  camera.position.set(0,0,dist);
-  camera.lookAt(0,0,0);
+  dist+=(targetDist-dist)*.085;
+  const off=panelWorldOffset(camera,dist,'atom-panel');
+  camera.position.set(0,-off,dist);camera.lookAt(0,-off,0);
+  updateScaleBar();
   renderer.render(scene,camera);
+}
+
+/* ================= THREE: NUCLEON (QUARKS) ================= */
+let nRenderer,nScene,nCamera,nRoot,nGlow;
+let nRotY=.4,nRotX=-.1,nAuto=true,nDist=9,nTarget=9,nFit=9,nMin=2,nMax=40,nOuter=3.2;
+let quarks=[],gluons=[],nucKind="proton";
+
+function initNuc(){
+  const canvas=document.getElementById('nuc-canvas');
+  nRenderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  nRenderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  nScene=new THREE.Scene();
+  nCamera=new THREE.PerspectiveCamera(45,1,.1,400);
+  nGlow=makeGlow('rgba(255,210,170,.8)','rgba(255,120,80,.25)');
+  nScene.add(new THREE.AmbientLight(0xd6a58f,.75));
+  const l1=new THREE.PointLight(0xffd9c0,1.3);l1.position.set(7,9,11);nScene.add(l1);
+  const l2=new THREE.PointLight(0x7fa8ff,.5);l2.position.set(-9,-6,-8);nScene.add(l2);
+  nScene.add(starfield(0xe8a58f));
+  const rs=()=>{nRenderer.setSize(innerWidth,innerHeight);nCamera.aspect=innerWidth/innerHeight;
+    nCamera.updateProjectionMatrix();nComputeFit();};
+  rs();addEventListener('resize',rs);
+  controls(canvas,v=>{nTarget=clamp(v,nMin,nMax)},()=>nTarget,
+    (dx,dy)=>{nRotY+=dx*.0065;nRotX=clamp(nRotX+dy*.0065,-1.35,1.35);nAuto=false;},null);
+  document.getElementById('nzin').onclick=()=>nTarget=clamp(nTarget*.78,nMin,nMax);
+  document.getElementById('nzout').onclick=()=>nTarget=clamp(nTarget*1.28,nMin,nMax);
+  document.getElementById('nzfit').onclick=()=>{nTarget=nFit;nRotX=-.1;nAuto=true;};
+  loopNuc();
+}
+function nComputeFit(){
+  const vF=nCamera.fov*Math.PI/180,hF=2*Math.atan(Math.tan(vF/2)*nCamera.aspect);
+  const pad=innerWidth<760?1.5:1.35;
+  nFit=clamp(Math.max(nOuter/Math.tan(vF/2),nOuter/Math.tan(hF/2))*pad,3,200);
+  nMin=1.2;nMax=nFit*5;
+}
+function openNucleon(){
+  if(!guard(420))return;
+  const d=currentData;
+  const neutrons=Math.max(0,Math.round(d.mass)-d.n);
+  nucKind = (neutrons>0 && Math.random()<0.5) ? "neutron" : "proton";
+  runWarp(NUC_STEPS,1250,18);
+  setTimeout(()=>{ try{buildNucleon(d);}catch(err){console.error(err);} nucView.classList.add('show'); },760);
+}
+document.getElementById('nuc-close').onclick=closeNuc;
+function closeNuc(){ if(!guard(420))return; nucView.classList.remove('show'); }
+
+function buildNucleon(d){
+  if(!nRenderer)initNuc();
+  disposeN();
+  nRoot=new THREE.Group();nScene.add(nRoot);
+  quarks=[];gluons=[];nRotY=.4;nRotX=-.1;nAuto=true;
+
+  const isP=nucKind==="proton";
+  // proton = up, up, down ; neutron = up, down, down
+  const set = isP? [["u",+2/3],["u",+2/3],["d",-1/3]] : [["u",+2/3],["d",-1/3],["d",-1/3]];
+  const cols=[0xff8f6b,0x7fd0ff,0x9be07f];  // "colour charge" r/g/b, illustrative
+  const R=1.5;
+  const qGeo=new THREE.SphereGeometry(.52,28,28);
+  set.forEach((q,i)=>{
+    const a=(i/3)*6.283;
+    const holder=new THREE.Group();
+    const mat=new THREE.MeshStandardMaterial({color:cols[i],roughness:.3,metalness:.15,
+      emissive:cols[i],emissiveIntensity:.35});
+    const m=new THREE.Mesh(qGeo,mat);
+    const g=new THREE.Sprite(new THREE.SpriteMaterial({map:nGlow,color:cols[i],transparent:true,opacity:.6,
+      blending:THREE.AdditiveBlending,depthWrite:false}));
+    g.scale.setScalar(2.6);
+    holder.add(m,g);
+    holder.userData={base:new THREE.Vector3(Math.cos(a)*R,Math.sin(a)*R*.55,Math.sin(a*1.7)*R*.5),ph:Math.random()*6.283};
+    holder.position.copy(holder.userData.base);
+    nRoot.add(holder);quarks.push({holder,type:q[0],charge:q[1]});
+  });
+  // gluon links
+  for(let i=0;i<3;i++){
+    const j=(i+1)%3;
+    const geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);
+    const line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:0xffd9a0,transparent:true,opacity:.55}));
+    nRoot.add(line);gluons.push({line,i,j});
+  }
+  // confinement bubble
+  const shell=new THREE.Mesh(new THREE.SphereGeometry(2.55,32,32),
+    new THREE.MeshBasicMaterial({color:isP?0xff8a6a:0xa8b6c6,transparent:true,opacity:.09,side:THREE.BackSide}));
+  nRoot.add(shell);
+  const wire=new THREE.Mesh(new THREE.SphereGeometry(2.56,18,14),
+    new THREE.MeshBasicMaterial({color:isP?0xffb098:0xc3ccd8,wireframe:true,transparent:true,opacity:.14}));
+  nRoot.add(wire);
+
+  nOuter=3.0;nComputeFit();nDist=nFit*2.6;nTarget=nFit;nCamera.position.set(0,0,nDist);
+
+  const q=isP?"up, up, down":"up, down, down";
+  const chg=isP?"+1":"0";
+  document.getElementById('nuc-sym').textContent=isP?"p⁺":"n⁰";
+  document.getElementById('nuc-name').textContent=isP?"Proton":"Neutron";
+  document.getElementById('nuc-cat').textContent=`inside ${d.name} · baryon made of three quarks`;
+  document.getElementById('nuc-stats').innerHTML=`
+    <div>Quark content<b>${q}</b></div>
+    <div>Net charge<b>${chg}</b></div>
+    <div>Up quark charge<b>+2/3</b></div>
+    <div>Down quark charge<b>−1/3</b></div>
+    <div>Held together by<b>Gluons</b></div>
+    <div>Diameter<b>≈ 1.7 fm</b></div>`;
+  document.getElementById('nuc-desc').textContent = isP
+    ? "A proton is not a solid ball. It is three quarks — two up and one down — bound by the strong force, carried by gluons. Add the fractional charges (+2/3 +2/3 −1/3) and you get exactly +1. Pull two quarks apart and the force between them grows rather than fades, so a lone quark has never been observed."
+    : "A neutron is one up quark and two down quarks. Their charges (+2/3 −1/3 −1/3) cancel exactly to zero, which is why neutrons add mass to a nucleus without adding charge. Free neutrons are unstable and decay into a proton, an electron and an antineutrino in about 15 minutes.";
+  document.getElementById('nuc-label').innerHTML=`<b>${isP?"Proton":"Neutron"}</b> · from the nucleus of ${d.sym}`;
+}
+function disposeN(){
+  if(!nRoot)return;nScene.remove(nRoot);
+  nRoot.traverse(o=>{if(o.geometry)o.geometry.dispose();
+    if(o.material){Array.isArray(o.material)?o.material.forEach(m=>m.dispose()):o.material.dispose();}});
+}
+function loopNuc(){
+  requestAnimationFrame(loopNuc);
+  if(!nScene)return;
+  const t=performance.now()/1000;
+  if(nRoot){
+    quarks.forEach((q,i)=>{
+      const b=q.holder.userData.base,ph=q.holder.userData.ph;
+      q.holder.position.set(
+        b.x+Math.sin(t*1.7+ph)*.28, b.y+Math.cos(t*1.4+ph)*.28, b.z+Math.sin(t*2.1+ph)*.24);
+    });
+    gluons.forEach(g=>{
+      const a=quarks[g.i].holder.position,b=quarks[g.j].holder.position;
+      g.line.geometry.setFromPoints([a,b]);
+      g.line.material.opacity=.4+.25*Math.sin(t*4+g.i);
+    });
+    if(nAuto)nRotY+=.0022;
+    nRoot.rotation.y+=(nRotY-nRoot.rotation.y)*.12;
+    nRoot.rotation.x+=(nRotX-nRoot.rotation.x)*.12;
+  }
+  nDist+=(nTarget-nDist)*.085;
+  const nOff=panelWorldOffset(nCamera,nDist,'nuc-panel');
+  nCamera.position.set(0,-nOff,nDist);nCamera.lookAt(0,-nOff,0);
+  // scale: nucleon radius 2.55 units ≈ 0.85 fm
+  const vF=nCamera.fov*Math.PI/180;
+  const widthUnits=2*Math.tan(vF/2)*nDist*nCamera.aspect;
+  const fm=widthUnits*(64/innerWidth)*(0.85/2.55);
+  document.getElementById('nucscaletext').textContent = fm<1? (fm*1000).toFixed(0)+" am" : fm.toFixed(2)+" fm";
+  nRenderer.render(nScene,nCamera);
 }
 </script>
 </body>
