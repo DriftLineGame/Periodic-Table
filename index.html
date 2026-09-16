@@ -43,6 +43,55 @@
     border-radius:50%;pointer-events:none;transition:transform .09s ease-out;
     background:radial-gradient(circle at 38% 32%,#e8f4ff,#8fb6d8 55%,#4e6b86);
     border:1px solid rgba(255,255,255,.4);box-shadow:0 5px 14px rgba(0,0,0,.55)}
+  #lab-hud{position:fixed;left:12px;top:12px;z-index:9;display:none;pointer-events:none;
+    max-width:min(300px,62vw);padding:11px 14px;border-radius:12px;font-family:Georgia,serif;
+    background:rgba(10,16,24,.72);border:1px solid rgba(160,200,240,.24);backdrop-filter:blur(7px);
+    color:#dbe9f7;text-shadow:0 1px 6px #000}
+  #lab-hud .lt{font-size:13px;color:#ffd98a;font-weight:600}
+  #lab-hud .ls{font-size:11px;color:#8fb3d9;margin:1px 0 6px}
+  #lab-hud .lo{font-size:13.5px;line-height:1.35}
+  #lab-hud .lr{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:10.5px;
+    font-family:-apple-system,Arial,sans-serif}
+  #lab-hud .ppe{padding:2px 7px;border-radius:10px;border:1px solid rgba(255,255,255,.18);
+    color:#7e8c9c;background:rgba(255,255,255,.04)}
+  #lab-hud .ppe.on{color:#8fe0b4;border-color:rgba(110,230,170,.5);background:rgba(50,160,120,.18)}
+  #lab-hud .haz{display:flex;align-items:center;gap:4px;color:#8fb3d9}
+  #lab-hud .haz i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.16);display:inline-block}
+  #lab-hud .haz i.on{background:#e0544a;box-shadow:0 0 8px rgba(224,84,74,.8)}
+  #labmodal{position:fixed;inset:0;z-index:84;display:none;align-items:center;justify-content:center;
+    background:rgba(3,6,10,.86);backdrop-filter:blur(9px);
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif}
+  #labmodal.on{display:flex}
+  #lm-card{width:min(560px,94vw);max-height:92vh;overflow-y:auto;padding:20px;border-radius:15px;
+    color:#eaf3ff;background:linear-gradient(180deg,#111f2d,#0a121c);
+    border:1px solid rgba(150,205,255,.3);box-shadow:0 30px 80px rgba(0,0,0,.72)}
+  #labmodal.good #lm-card{border-color:rgba(90,220,160,.5)}
+  #labmodal.bad #lm-card{border-color:rgba(230,110,90,.55)}
+  #lm-title{font-family:Georgia,serif;font-size:20px;margin:0 0 10px}
+  #lm-body{font-family:Georgia,serif;font-size:14px;line-height:1.55;color:#dbe9f7}
+  #lm-body p{margin:0 0 10px}
+  #lm-body .dim{color:#87a3bd;font-size:12.5px;font-style:italic}
+  #lm-opts{display:grid;gap:9px;margin-top:14px}
+  #lm-opts.locked .qz-opt{cursor:default}
+  .qz-opt.danger{border-color:rgba(220,120,90,.4)}
+  #lm-note{display:none;margin-top:13px;padding:12px 14px;border-radius:10px;font-family:Georgia,serif;
+    font-size:13px;line-height:1.5;background:rgba(90,150,220,.12);
+    border:1px solid rgba(150,205,255,.22);color:#d7e8f8}
+  #lm-note.good{background:rgba(40,160,110,.18);border-color:rgba(90,230,170,.4);color:#dcfff2}
+  #lm-note.bad{background:rgba(170,60,50,.18);border-color:rgba(230,120,100,.4);color:#ffdfd8}
+  #lm-foot{display:flex;gap:9px;margin-top:16px}
+  #lm-foot button{flex:1;padding:12px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:13.5px;
+    border:1px solid rgba(190,220,255,.35);background:rgba(255,255,255,.07);color:#dff0ff}
+  #lm-foot button.primary{background:rgba(40,120,100,.45);border-color:rgba(90,220,180,.5)}
+  #lm-body .tag{font-size:10px;padding:2px 6px;border-radius:9px;background:rgba(90,180,255,.18);
+    border:1px solid rgba(150,205,255,.3);color:#bcdcff;margin-left:6px}
+  .qz-opt .tag{font-size:10px;padding:2px 6px;border-radius:9px;background:rgba(90,180,255,.18);
+    border:1px solid rgba(150,205,255,.3);color:#bcdcff;margin-left:6px}
+  .report{margin-top:10px}
+  .report .rr{display:flex;justify-content:space-between;padding:8px 2px;
+    border-bottom:1px solid rgba(150,205,255,.14);font-size:13.5px}
+  #room-lens{position:fixed;inset:0;z-index:4;pointer-events:none;
+    background:radial-gradient(ellipse 70% 62% at 50% 50%,transparent 42%,rgba(0,0,0,.30) 78%,rgba(0,0,0,.66) 100%)}
   #hud{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9;pointer-events:none;
     display:flex;gap:18px;padding:7px 16px;border-radius:20px;font-family:Georgia,serif;font-size:12.5px;
     color:#cfe0f0;background:rgba(10,16,24,.62);border:1px solid rgba(160,200,240,.22);
@@ -111,14 +160,14 @@
     background:rgba(4,10,16,.82);backdrop-filter:blur(8px);
     font-family:-apple-system,'Helvetica Neue',Arial,sans-serif}
   #quiz.on{display:flex}
-  #qz-card{width:min(540px,94vw);max-height:92vh;overflow-y:auto;padding:20px;border-radius:15px;color:#eaf3ff;
+  .qz-card{width:min(540px,94vw);max-height:92vh;overflow-y:auto;padding:20px;border-radius:15px;color:#eaf3ff;
     background:linear-gradient(180deg,#101d2b,#0a121c);border:1px solid rgba(150,205,255,.3);
     box-shadow:0 30px 80px rgba(0,0,0,.7)}
-  #qz-hud{display:flex;gap:16px;font-size:12px;color:#8fb3d9;margin-bottom:12px}
-  #qz-hud b{color:#fff}
+  .qz-hud{display:flex;gap:16px;font-size:12px;color:#8fb3d9;margin-bottom:12px}
+  .qz-hud b{color:#fff}
   .hudline{display:flex;gap:16px;font-size:12px;color:#8fb3d9;margin-bottom:12px}
   .hudline b{color:#fff}
-  #qz-q{font-family:Georgia,serif;font-size:19px;line-height:1.4;margin-bottom:16px}
+  .qz-q{font-family:Georgia,serif;font-size:19px;line-height:1.4;margin-bottom:16px}
   #qz-opts{display:grid;gap:9px}
   .qz-opt{padding:13px 15px;border-radius:10px;cursor:pointer;text-align:left;font-family:Georgia,serif;
     font-size:16px;background:rgba(255,255,255,.06);border:1px solid rgba(150,205,255,.25);color:#eaf3ff}
@@ -128,7 +177,7 @@
   .qz-opt.wrong{background:rgba(160,50,50,.42);border-color:#e07a7a}
   #qz-why{display:none;margin-top:14px;padding:12px 14px;border-radius:10px;font-family:Georgia,serif;
     font-size:13.5px;line-height:1.5;background:rgba(90,150,220,.12);border:1px solid rgba(150,205,255,.22);color:#d7e8f8}
-  #qz-btns{display:flex;gap:9px;margin-top:16px}
+  .qz-btns{display:flex;gap:9px;margin-top:16px}
   #flametest{position:fixed;inset:0;z-index:76;display:none;align-items:center;justify-content:center;
     background:rgba(3,6,10,.88);backdrop-filter:blur(8px);
     font-family:-apple-system,'Helvetica Neue',Arial,sans-serif}
@@ -173,7 +222,7 @@
   .bal-row{display:grid;grid-template-columns:2fr 1fr .6fr 1fr;gap:8px;padding:6px 12px;border-radius:8px;
     font-family:ui-monospace,Menlo,monospace;font-size:13px;background:rgba(170,60,50,.16);color:#ffd8d0}
   .bal-row.ok{background:rgba(40,150,110,.18);color:#d4fff0}
-  #qz-btns button{flex:1;padding:12px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:13.5px;
+  .qz-btns button{flex:1;padding:12px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:13.5px;
     border:1px solid rgba(190,220,255,.35);background:rgba(255,255,255,.07);color:#dff0ff}
   #qz-next{background:rgba(40,120,100,.45) !important;border-color:rgba(90,220,180,.5) !important}
   #icon-btn{width:38px;padding:6px 0;text-align:center}
@@ -265,8 +314,8 @@
   .info-panel.collapsed .stats,.info-panel.collapsed #info-desc,.info-panel.collapsed #lab-cta,
   .info-panel.collapsed #nuc-desc,.info-panel.collapsed #spec-desc{display:none}
   .info-panel.collapsed #info-sym,.info-panel.collapsed #nuc-sym,.info-panel.collapsed #spec-sym{font-size:27px}
-  .info-panel.collapsed #info-top{margin-bottom:0}
-  #info-top{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .info-panel.collapsed .info-top{margin-bottom:0}
+  .info-top{display:flex;align-items:center;gap:14px;margin-bottom:6px}
   #info-sym,#nuc-sym,#spec-sym{font-family:Georgia,serif;font-size:42px;font-weight:700;color:#fff;
     text-shadow:0 0 22px rgba(120,190,255,.6);line-height:1}
   #info-name,#nuc-name,#spec-name{font-size:18px;font-weight:600}
@@ -336,6 +385,7 @@
 <body>
 
 <canvas id="room-canvas"></canvas>
+<div id="room-lens"></div>
 <div id="room-ui">
   <div id="crosshair"></div>
   <div id="stick">
@@ -344,6 +394,7 @@
     <div id="stick-knob"></div>
   </div>
   <div id="hud"></div>
+  <div id="lab-hud"></div>
   <div id="stamina-wrap"><div id="stamina"></div></div>
   <button id="sprint-btn">RUN</button>
   <div id="room-hint">stick to walk &middot; RUN to sprint &middot; drag elsewhere to look<br>four stations and five secrets are hidden in this lab</div>
@@ -390,37 +441,44 @@
   <div class="grad"></div>
   <div class="ends"><span id="tl-lo"></span><span id="tl-hi"></span></div>
 </div>
-<div id="titration"><div id="qz-card">
+<div id="labmodal"><div id="lm-card">
+  <h2 id="lm-title"></h2>
+  <div id="lm-body"></div>
+  <div id="lm-opts"></div>
+  <div id="lm-note"></div>
+  <div id="lm-foot"></div>
+</div></div>
+<div id="titration"><div class="qz-card">
   <div id="ti-hud" class="hudline"></div>
-  <div id="qz-q">Add base until the indicator just turns pink — then stop.</div>
+  <div class="qz-q">Add base until the indicator just turns pink — then stop.</div>
   <canvas id="ti-canvas"></canvas>
   <div id="ti-readout"><span>Added</span><span id="ti-vol">0.00 mL</span></div>
   <button id="ti-tap">Hold to add base</button>
   <div id="ti-why"></div>
-  <div id="qz-btns"><button id="ti-close">Leave the bench</button><button id="ti-next">New sample →</button></div>
+  <div class="qz-btns"><button id="ti-close">Leave the bench</button><button id="ti-next">New sample →</button></div>
 </div></div>
-<div id="balance"><div id="qz-card">
+<div id="balance"><div class="qz-card">
   <div id="bal-hud" class="hudline"></div>
-  <div id="qz-q">Balance the equation.</div>
+  <div class="qz-q">Balance the equation.</div>
   <div id="bal-eq"></div>
   <div id="bal-tally"></div>
   <div id="bal-why"></div>
-  <div id="qz-btns"><button id="bal-close">Leave the board</button><button id="bal-check">Check</button><button id="bal-next">New equation →</button></div>
+  <div class="qz-btns"><button id="bal-close">Leave the board</button><button id="bal-check">Check</button><button id="bal-next">New equation →</button></div>
 </div></div>
-<div id="flametest"><div id="qz-card">
-  <div id="qz-hud"><span>Score <b id="ft-score">0 / 0</b></span><span>Streak <b id="ft-streak">0</b></span></div>
-  <div id="qz-q">Which metal salt is burning?</div>
+<div id="flametest"><div class="qz-card">
+  <div class="qz-hud"><span>Score <b id="ft-score">0 / 0</b></span><span>Streak <b id="ft-streak">0</b></span></div>
+  <div class="qz-q">Which metal salt is burning?</div>
   <canvas id="ft-canvas"></canvas>
   <div id="ft-opts" class="opts"></div>
   <div id="ft-why"></div>
-  <div id="qz-btns"><button id="ft-close">Leave the bench</button><button id="ft-next">Burn another →</button></div>
+  <div class="qz-btns"><button id="ft-close">Leave the bench</button><button id="ft-next">Burn another →</button></div>
 </div></div>
-<div id="quiz"><div id="qz-card">
-  <div id="qz-hud"><span>Score <b id="qz-score">0 / 0</b></span><span>Streak <b id="qz-streak">0</b></span></div>
-  <div id="qz-q"></div>
+<div id="quiz"><div class="qz-card">
+  <div class="qz-hud"><span>Score <b id="qz-score">0 / 0</b></span><span>Streak <b id="qz-streak">0</b></span></div>
+  <div id="qz-q" class="qz-q"></div>
   <div id="qz-opts"></div>
   <div id="qz-why"></div>
-  <div id="qz-btns"><button id="qz-close">Close</button><button id="qz-next">Next question →</button></div>
+  <div class="qz-btns"><button id="qz-close">Close</button><button id="qz-next">Next question →</button></div>
 </div></div>
 
 <div id="atom-view" class="scene3d">
@@ -435,7 +493,7 @@
   <div class="zoom-ctl"><button id="zin">＋</button><button id="zout">－</button><button id="zfit" class="fit">FIT</button></div>
   <div class="info-panel" id="atom-panel">
     <button class="panel-toggle" id="atom-toggle">▾</button>
-    <div id="info-top"><div id="info-sym"></div><div><div id="info-name"></div><div id="info-cat"></div></div></div>
+    <div class="info-top"><div id="info-sym"></div><div><div id="info-name"></div><div id="info-cat"></div></div></div>
     <div class="stats" id="info-stats"></div>
     <div id="info-desc"></div>
     <button id="lab-cta">See what this reacts with →</button>
@@ -452,7 +510,7 @@
   <div class="zoom-ctl"><button id="nzin">＋</button><button id="nzout">－</button><button id="nzfit" class="fit">FIT</button></div>
   <div class="info-panel" id="nuc-panel">
     <button class="panel-toggle" id="nuc-toggle">▾</button>
-    <div id="info-top"><div id="nuc-sym"></div><div><div id="nuc-name"></div><div id="nuc-cat"></div></div></div>
+    <div class="info-top"><div id="nuc-sym"></div><div><div id="nuc-name"></div><div id="nuc-cat"></div></div></div>
     <div class="stats" id="nuc-stats"></div>
     <div id="nuc-desc"></div>
   </div>
@@ -465,7 +523,7 @@
   <div class="zoom-ctl"><button id="szin">＋</button><button id="szout">－</button><button id="szfit" class="fit">FIT</button></div>
   <div class="info-panel" id="spec-panel">
     <button class="panel-toggle" id="spec-toggle">▾</button>
-    <div id="info-top"><div id="spec-sym"></div><div><div id="spec-name"></div><div id="spec-cat"></div></div></div>
+    <div class="info-top"><div id="spec-sym"></div><div><div id="spec-name"></div><div id="spec-cat"></div></div></div>
     <div class="stats" id="spec-stats"></div>
     <div id="spec-desc"></div>
   </div>
@@ -722,7 +780,7 @@ const ACID_NAME={NO3:"Nitric acid",NO2:"Nitrous acid",SO4:"Sulfuric acid",SO3:"S
 
 /* ---- reaction engine ---- */
 function gcd(a,b){return b?gcd(b,a%b):a;}
-function posCharge(d){ const p=d.charges.filter(c=>c>0); return p.length?Math.max(...p):null; }
+function posCharge(d){ const p=d.charges.filter(c=>c>0); return p.length?p[0]:null; }
 function negCharge(d){ const n=d.charges.filter(c=>c<0); return n.length?Math.min(...n):null; }
 function sub(n){ return n===1?"":String(n).replace(/[0-9]/g,c=>"₀₁₂₃₄₅₆₇₈₉"[+c]); }
 
@@ -837,7 +895,7 @@ function polyReaction(a,b){
     const p=x.charges.filter(c=>c>0);
     if(!p.length) return null;
     if(!x.isMetal && x.sym!=="H") return null;   // only metals + hydrogen pair with polyatomic anions
-    return Math.max(...p);
+    return p[0];
   };
   const asAnion=x=>{
     if(x.poly) return x.q<0?x.q:null;
@@ -1250,6 +1308,9 @@ function partnerLine(d){
           : `${d.name} is essentially unreactive under ordinary conditions. Tap it again to pick something else.`;
 }
 function onPick(d){
+  if(typeof LAB!=="undefined" && LAB.active && LAB.awaitElement && !d.poly){
+    if(labElementPicked(d)) return;
+  }
   if(!labMode){ if(d.poly){ setLab(true,d); } else openElement(d); return; }
   if(!labA){ labA=d; banner(partnerLine(d)); refreshPaper(); return; }
   if(labA===d){ labA=null;
@@ -3167,7 +3228,7 @@ function initRoom(){
   rCam=new THREE.PerspectiveCamera(70,1,.05,80);
 
   const {W,D,H}=ROOM;
-  rScene.add(new THREE.HemisphereLight(0x9fb8d6,0x1a1d22,.55));
+  rScene.add(new THREE.HemisphereLight(0xa8c2de,0x241f1a,.62));
   rScene.add(new THREE.AmbientLight(0x7d8ea6,.22));
 
   // ceiling fixtures
@@ -3180,6 +3241,15 @@ function initRoom(){
     panel.position.set(i*4.4,H-.16,j*5.4); rScene.add(panel);
     const l=new THREE.PointLight(0xdcecff,.34,15,1.8);
     l.position.set(i*4.4,H-.55,j*5.4); rScene.add(l);
+    // visible light cone with dust inside it
+    const cone=new THREE.Mesh(new THREE.CylinderGeometry(.55,2.6,H-.3,26,1,true),
+      new THREE.MeshBasicMaterial({color:0xcfe4ff,transparent:true,opacity:.035,
+        blending:THREE.AdditiveBlending,side:THREE.DoubleSide,depthWrite:false}));
+    cone.position.set(i*4.4,(H-.3)/2,j*5.4); rScene.add(cone);
+    const halo=new THREE.Mesh(new THREE.PlaneGeometry(3.0,1.0),
+      new THREE.MeshBasicMaterial({color:0xdcecff,transparent:true,opacity:.10,
+        blending:THREE.AdditiveBlending,depthWrite:false,fog:false}));
+    halo.rotation.x=Math.PI/2; halo.position.set(i*4.4,H-.19,j*5.4); rScene.add(halo);
   }
   const key=new THREE.DirectionalLight(0xffe8cc,.42);
   key.position.set(-7,10,5); key.castShadow=true;
@@ -3192,8 +3262,11 @@ function initRoom(){
   const ft=new THREE.CanvasTexture(floorTex());
   ft.wrapS=ft.wrapT=THREE.RepeatWrapping; ft.repeat.set(12,10);
   ft.anisotropy=rRenderer.capabilities.getMaxAnisotropy();
+  const fb=new THREE.CanvasTexture(floorTex());
+  fb.wrapS=fb.wrapT=THREE.RepeatWrapping; fb.repeat.set(12,10);
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(W,D),
-    new THREE.MeshStandardMaterial({map:ft,roughness:.55,metalness:.06}));
+    new THREE.MeshStandardMaterial({map:ft,bumpMap:fb,bumpScale:.035,
+      roughness:.42,metalness:.10}));
   floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; rScene.add(floor);
   const ceil=new THREE.Mesh(new THREE.PlaneGeometry(W,D),
     new THREE.MeshStandardMaterial({color:0x272c34,roughness:.95}));
@@ -3207,7 +3280,7 @@ function initRoom(){
     const t=wt.clone(); t.needsUpdate=true; t.wrapS=t.wrapT=THREE.RepeatWrapping;
     t.repeat.set(w/3,H/3);
     const m=new THREE.Mesh(new THREE.PlaneGeometry(w,H),
-      new THREE.MeshStandardMaterial({map:t,roughness:.88}));
+      new THREE.MeshStandardMaterial({map:t,bumpMap:t,bumpScale:.06,roughness:.9}));
     m.position.set(x,H/2,z); m.rotation.y=ry; m.receiveShadow=true; rScene.add(m);
     const base=new THREE.Mesh(new THREE.BoxGeometry(w,.16,.06),
       new THREE.MeshStandardMaterial({color:0x22262c,roughness:.7}));
@@ -3285,6 +3358,10 @@ function initRoom(){
   const p3=wallPoster(1.2,1.2,"hazard"); p3.position.set(W/2-.05,2.2,4.6); p3.rotation.y=-Math.PI/2; rScene.add(p3);
   const p4=wallPoster(1.5,1.1,"joke"); p4.position.set(8.0,2.1,D/2-.04); p4.rotation.y=Math.PI; rScene.add(p4);
   rScene.add(wallClock(-1.0,3.1,-D/2+.08));
+  // safety desk fittings, so the pads sit next to real furniture
+  const sd=cabinet(1.6,1.0,.55,0x3f6f58); sd.position.set(-2.0,0,-9.0); rScene.add(sd);
+  addCollider(-2.0,-9.0,.85,.32);
+  const sp=wallPoster(1.4,1.0,"safety"); sp.position.set(-2.0,2.0,-D/2+.06); rScene.add(sp);
 
   // partition that hides the red pad
   const part=new THREE.Mesh(new THREE.BoxGeometry(5.0,2.3,.16),
@@ -3298,6 +3375,10 @@ function initRoom(){
   addPad("titrate",0xffb547,"TITRATION","FIND THE ENDPOINT",-0.2,7.0,()=>{PLAYER.frozen=true;openTitration();});
   addPad("balance",0xb978ff,"BALANCE","EQUATION PRACTICE",6.4,7.4,()=>{PLAYER.frozen=true;openBalance();});
   padRed=addPad("danger",0xff3b2f,"DO NOT ENTER","",10.2,6.2,()=>startDeath()).mesh;
+  addPad("brief",0xffd24a,"LAB MODE","GUIDED EXPERIMENT",3.3,0,()=>{});
+  addPad("safety",0xdff0ff,"SAFETY DESK","PPE AND HAZARDS",-2.0,-8.0,()=>{});
+  addPad("shelf",0xff8a3a,"REAGENTS","DRAW YOUR CHEMICALS",-8.0,-8.0,()=>{});
+  addPad("writeup",0x4fe0e0,"RECORD","WRITE UP YOUR RESULT",1.0,8.4,()=>{});
 
   /* ---- easter eggs ---- */
   addSecret("duck",-6.6,.97,2.1,duck,"A rubber duck. Someone has drawn tiny goggles on it.");
@@ -3630,8 +3711,17 @@ function loopRoom(){
   if(PLAYER.dead) updateDeath(dt);
   else checkSecrets();
 
+  const wantPad=LAB.active?labTargetPad():null;
   PADS.forEach(p=>{ animatePad(p.mesh,t+p.phase,p.speed);
-    p.light.intensity=1.15+.65*(.5+.5*Math.sin(t*p.speed+p.phase)); });
+    const lit=!wantPad||p.id===wantPad;
+    const k=lit?1:.22;
+    p.mesh.userData.decal.material.opacity*=k;
+    p.mesh.userData.beam.material.opacity*=k;
+    p.mesh.userData.lab.material.opacity*=lit?1:.15;
+    p.light.intensity=(1.15+.65*(.5+.5*Math.sin(t*p.speed+p.phase)))*(lit?1:.3);
+    if(lit&&wantPad){ p.light.intensity*=1.5;
+      p.mesh.userData.decal.material.opacity=Math.min(1,p.mesh.userData.decal.material.opacity*1.35); }
+  });
 
   if(!PLAYER.dead&&!PLAYER.frozen){
     let any=false, near=null;
@@ -3640,7 +3730,10 @@ function loopRoom(){
       if(d<2.6&&(!near||d<near.d)) near={p,d}; });
     if(!any) padArmed=true;
     else if(padArmed){ PADS.forEach(p=>{
-      if(Math.hypot(PLAYER.x-p.x,PLAYER.z-p.z)<1.0&&padArmed){ padArmed=false; p.fn(); } }); }
+      if(Math.hypot(PLAYER.x-p.x,PLAYER.z-p.z)<1.0&&padArmed){
+        padArmed=false;
+        if(!labStation(p.id)) p.fn();
+      } }); }
   }
 
   rScene.traverse(o=>{ if(o.userData&&o.userData.flame){
@@ -4021,6 +4114,421 @@ function closeBalance(){
   returnFromPad();
 }
 
+/* ==================================================================
+   LAB MODE — campaign framework + Lab 1
+   Reads from the periodic table; never modifies it.
+   ================================================================== */
+const LAB={
+  active:false, step:0, strikes:0, score:100, started:0,
+  ppe:{goggles:false,gloves:false},
+  awaitElement:null, carrying:[], unknown:null, finished:false
+};
+const HAZARD_MAX=3;
+
+/* --- the four candidate salts; the unknown is drawn fresh each run --- */
+const LAB1_CANDIDATES=[
+  {metal:"Lithium",  sym:"Li", col:"#ff3b52", word:"crimson"},
+  {metal:"Calcium",  sym:"Ca", col:"#ff7a2a", word:"orange-red"},
+  {metal:"Copper",   sym:"Cu", col:"#2fe08a", word:"blue-green"},
+  {metal:"Barium",   sym:"Ba", col:"#a8e04f", word:"pale green"}
+];
+
+const LAB1={
+  title:"Lab 1 — Identify the Unknown",
+  brief:"Sample C is an unlabelled metal chloride. It is one of four: lithium, calcium, copper or barium. "+
+        "Confirm the sample's anion at the periodic table, gear up at the safety desk, draw your reagents, "+
+        "run a flame test, and record your finding at the board.",
+  steps:[
+    {pad:"brief",  label:"Read the brief at the task board"},
+    {pad:"table",  label:"At the periodic table, tap the element described"},
+    {pad:"safety", label:"Gear up and pass the safety check"},
+    {pad:"shelf",  label:"Draw the correct reagents from the shelf"},
+    {pad:"flame",  label:"Run the flame test at the bench"},
+    {pad:"writeup",label:"Record your result at the board"}
+  ]
+};
+
+/* ---------------- HUD ---------------- */
+function labHUD(){
+  const box=document.getElementById('lab-hud');
+  if(!LAB.active){ box.style.display="none"; return; }
+  box.style.display="block";
+  const st=LAB1.steps[LAB.step];
+  const pips=[...Array(HAZARD_MAX)].map((_,i)=>
+    `<i class="${i<LAB.strikes?'on':''}"></i>`).join('');
+  box.innerHTML=
+    `<div class="lt">${LAB1.title}</div>`+
+    `<div class="ls">Step ${Math.min(LAB.step+1,LAB1.steps.length)} of ${LAB1.steps.length}</div>`+
+    `<div class="lo">${st?st.label:"Lab complete"}</div>`+
+    `<div class="lr"><span class="ppe ${LAB.ppe.goggles?'on':''}">goggles</span>`+
+    `<span class="ppe ${LAB.ppe.gloves?'on':''}">gloves</span>`+
+    `<span class="haz">hazard ${pips}</span></div>`;
+}
+function labTargetPad(){ const st=LAB1.steps[LAB.step]; return st?st.pad:null; }
+
+/* ---------------- modal ---------------- */
+let modalPick=null;
+function labModal(title,body,opts,onPick,tone){
+  const m=document.getElementById('labmodal');
+  document.getElementById('lm-title').textContent=title;
+  document.getElementById('lm-body').innerHTML=body;
+  const box=document.getElementById('lm-opts'); box.innerHTML="";
+  box.className=""; modalPick=onPick;
+  (opts||[]).forEach(o=>{
+    const b=document.createElement('button');
+    b.className='qz-opt'+(o.danger?' danger':'');
+    b.innerHTML=o.label;
+    b.onclick=()=>{ if(box.classList.contains('locked'))return; onPick&&onPick(o,b,box); };
+    box.appendChild(b);
+  });
+  const f=document.getElementById('lm-foot'); f.innerHTML="";
+  m.className="on"+(tone?(" "+tone):"");
+}
+function labModalClose(){ document.getElementById('labmodal').className=""; }
+function labFoot(label,fn,cls){
+  const f=document.getElementById('lm-foot');
+  const b=document.createElement('button');
+  b.textContent=label; if(cls)b.className=cls;
+  b.onclick=fn; f.appendChild(b); return b;
+}
+function labNote(html,tone){
+  const n=document.getElementById('lm-note');
+  n.className=tone||""; n.innerHTML=html; n.style.display="block";
+}
+function labClearNote(){ document.getElementById('lm-note').style.display="none"; }
+
+/* ---------------- scoring & failure ---------------- */
+function labStrike(msg){
+  LAB.strikes++; LAB.score-=15;
+  SFX.click(200,.18,.15);
+  labHUD();
+  if(LAB.strikes>=HAZARD_MAX){ labEvacuate(); return true; }
+  toast("⚠ "+msg+"  ("+LAB.strikes+"/"+HAZARD_MAX+" hazard)");
+  return false;
+}
+function labSlip(points,msg){
+  LAB.score-=points; toast(msg); labHUD();
+}
+function labEvacuate(){
+  labModalClose();
+  labModal("Lab evacuated",
+    "<p>Three hazard violations. The supervisor has pulled you off the bench and the experiment is void.</p>",
+    [], null, "bad");
+  labFoot("Restart the lab",()=>{ labModalClose(); labStart(true); },"primary");
+  PLAYER.frozen=true;
+}
+function labIncident(reason){
+  labModalClose();
+  LAB.active=false; labHUD();
+  toast("✖ "+reason);
+  startDeath();
+}
+function labGrade(){
+  const mins=(Date.now()-LAB.started)/60000;
+  const timeBonus=mins<4?10:mins<7?5:0;
+  const raw=Math.max(0,Math.min(100,LAB.score+timeBonus));
+  const letter=raw>=93?"A":raw>=85?"A−":raw>=78?"B+":raw>=70?"B":raw>=62?"C":raw>=50?"D":"F";
+  return {raw,letter,mins,timeBonus};
+}
+
+/* ---------------- step 1: brief ---------------- */
+function labStart(restart){
+  LAB.active=true; LAB.step=0; LAB.strikes=0; LAB.score=100;
+  LAB.started=Date.now(); LAB.ppe={goggles:false,gloves:false};
+  LAB.carrying=[]; LAB.finished=false; LAB.awaitElement=null;
+  LAB.unknown=LAB1_CANDIDATES[Math.floor(Math.random()*LAB1_CANDIDATES.length)];
+  labHUD();
+  if(restart) labStepBrief(); else labStepBrief();
+}
+function labStepBrief(){
+  PLAYER.frozen=true;
+  labModal(LAB1.title,
+    `<p>${LAB1.brief}</p>
+     <p class="dim">Balanced difficulty: careless answers cost marks, but genuine safety violations end the run.</p>`,
+    [],null);
+  labFoot("Begin",()=>{ labModalClose(); PLAYER.frozen=false;
+    LAB.step=1; labHUD(); padArmed=false;
+    toast("Head to the blue pad — the periodic table."); },"primary");
+}
+
+/* ---------------- step 2: the periodic table lookup ---------------- */
+function labStepTable(){
+  LAB.awaitElement={
+    answer:"Cl",
+    prompt:"Sample C is a metal <b>chloride</b>. Confirm the anion: tap the element that is a "+
+           "<b>halogen in period 3 with 7 valence electrons</b>."
+  };
+  labModal("Confirm the anion",
+    `<p>${LAB.awaitElement.prompt}</p>
+     <p class="dim">The table opens when you close this. Tap the element on the sheet.</p>`,
+    [],null);
+  labFoot("Open the table",()=>{ labModalClose(); enterDesk(); },"primary");
+}
+function labElementPicked(d){
+  if(!LAB.awaitElement) return false;
+  if(d.sym===LAB.awaitElement.answer){
+    LAB.awaitElement=null;
+    SFX.click(880,.1,.16); setTimeout(()=>SFX.click(1320,.14,.13),95);
+    toast("✓ Chloride confirmed. Cl⁻ — 7 valence electrons, gains one to fill its shell.");
+    LAB.step=2; labHUD();
+    setTimeout(()=>{ if(MODE==="desk") exitDesk(); },1400);
+    return true;
+  }
+  labSlip(8,`✗ ${d.name} is not it — check group 17, period 3.`);
+  return true;
+}
+
+/* ---------------- step 3: the safety desk ---------------- */
+const SAFETY_Q=[
+  {q:"You are about to work with an open flame. What is required before you start?",
+   opts:[{label:"Safety goggles — always, no exceptions",ok:true},
+         {label:"Goggles only if something might splash"},
+         {label:"Nothing, a flame test is low risk"},
+         {label:"A lab coat is enough on its own"}],
+   why:"Goggles go on before any open flame, every time. Eyes cannot be repaired."},
+  {q:"The sample is a metal chloride. Which glove is appropriate?",
+   opts:[{label:"Nitrile gloves",ok:true},
+         {label:"Bare hands — chlorides are just salt"},
+         {label:"Thick oven mitts"},
+         {label:"Latex, because it is cheapest"}],
+   why:"Nitrile resists a wide range of chemicals and keeps enough dexterity to hold a wire loop."},
+  {q:"Where should you run this flame test?",
+   opts:[{label:"At the bench, with the fume hood available nearby",ok:true},
+         {label:"Sealed inside the fume hood with the sash down"},
+         {label:"Wherever there is space"},
+         {label:"Next to the reagent shelf so refills are quick"}],
+   why:"A flame test is done at the bench in clear space. Never beside open reagent bottles."}
+];
+function labStepSafety(){
+  let qi=0, wrong=0;
+  const ask=()=>{
+    if(qi>=SAFETY_Q.length){ finishSafety(); return; }
+    const Q=SAFETY_Q[qi];
+    labModal("Safety desk",`<p><b>Question ${qi+1} of ${SAFETY_Q.length}</b></p><p>${Q.q}</p>`,
+      Q.opts,(o,b,box)=>{
+        box.classList.add('locked');
+        [...box.children].forEach((c,i)=>{
+          if(Q.opts[i].ok) c.classList.add('right');
+          else if(c===b) c.classList.add('wrong');
+        });
+        if(!o.ok){ wrong++; if(labStrike("Safety answer wrong")) return; }
+        else { SFX.click(820,.09,.14); }
+        labNote(Q.why,o.ok?"good":"bad");
+        labFoot("Next",()=>{ labClearNote(); qi++; ask(); },"primary");
+      });
+  };
+  const finishSafety=()=>{
+    labModal("Personal protective equipment",
+      "<p>Put on what this procedure requires. You will not be able to light the burner without it.</p>",
+      [{label:"Put on safety goggles"},{label:"Put on nitrile gloves"},{label:"Skip PPE and continue"}],
+      (o,b,box)=>{
+        if(o.label.includes("goggles")){ LAB.ppe.goggles=true; b.classList.add('right'); SFX.click(760,.07,.13); }
+        else if(o.label.includes("nitrile")){ LAB.ppe.gloves=true; b.classList.add('right'); SFX.click(700,.07,.13); }
+        else { toast("Skipping PPE is your choice. It will not go well."); }
+        labHUD();
+        if(LAB.ppe.goggles&&LAB.ppe.gloves){
+          labClearNote();
+          labNote("Geared up. Head to the orange pad for reagents.","good");
+          document.getElementById('lm-foot').innerHTML="";
+          labFoot("Done",()=>{ labModalClose(); PLAYER.frozen=false;
+            LAB.step=3; labHUD(); padArmed=false;
+            if(wrong===0) toast("Perfect safety check. Reagent shelf next."); },"primary");
+        }
+      });
+    labFoot("Leave the desk",()=>{ labModalClose(); PLAYER.frozen=false; padArmed=false;
+      if(LAB.ppe.goggles&&LAB.ppe.gloves){ LAB.step=3; labHUD(); }
+      else toast("You still need goggles and gloves."); });
+  };
+  ask();
+}
+
+/* ---------------- step 4: the reagent shelf ---------------- */
+function labStepShelf(){
+  const need=new Set(["sample","wire","hcl"]);
+  const got=new Set();
+  const items=[
+    {id:"sample",label:"<b>Sample C</b> — unlabelled metal chloride <span class='tag'>required</span>"},
+    {id:"wire",  label:"<b>Nichrome wire loop</b> <span class='tag'>required</span>"},
+    {id:"hcl",   label:"<b>Dilute HCl</b> — for cleaning the loop <span class='tag'>required</span>"},
+    {id:"naoh",  label:"Concentrated NaOH — strong base"},
+    {id:"acetone",label:"Acetone — highly flammable"},
+    {id:"unknown",label:"Unmarked brown bottle, no label at all",danger:true}
+  ];
+  labModal("Reagent shelf",
+    "<p>Draw only what the procedure calls for. Three items are needed.</p>",
+    items,(o,b,box)=>{
+      if(o.id==="unknown"){
+        labIncident("You opened an unlabelled bottle next to an open flame.");
+        return;
+      }
+      if(o.id==="acetone"){
+        if(labStrike("Acetone near an open flame is a fire risk")) return;
+        b.classList.add('wrong'); return;
+      }
+      if(o.id==="naoh"){
+        labSlip(8,"✗ NaOH is not part of a flame test."); b.classList.add('wrong'); return;
+      }
+      if(got.has(o.id)) return;
+      got.add(o.id); b.classList.add('right'); SFX.click(700,.06,.13);
+      LAB.carrying.push(o.id);
+      if(got.size===need.size){
+        labNote("All three reagents drawn. Take them to the bench — the green pad.","good");
+        document.getElementById('lm-foot').innerHTML="";
+        labFoot("Head to the bench",()=>{ labModalClose(); PLAYER.frozen=false;
+          LAB.step=4; labHUD(); padArmed=false; },"primary");
+      }
+    });
+  labFoot("Step back",()=>{ labModalClose(); PLAYER.frozen=false; padArmed=false; });
+}
+
+/* ---------------- step 5: the flame test ---------------- */
+function labStepFlame(){
+  if(!LAB.ppe.goggles){
+    labIncident("You lit the burner without eye protection.");
+    return;
+  }
+  if(LAB.carrying.length<3){
+    PLAYER.frozen=false; padArmed=false;
+    toast("You are missing reagents. Go back to the shelf.");
+    return;
+  }
+  // run the existing flame mini-game, but forced to the unknown's colour
+  FT.on=true;
+  document.getElementById('flametest').classList.add('on');
+  if(!ftCtx) ftInit();
+  FT.locked=false;
+  FT.cur=FLAMES.find(f=>f.m===LAB.unknown.metal)||FLAMES[0];
+  ftColor=FT.cur.col; ftBurn=1; ftParts=[];
+  ftBurnSound();
+  document.getElementById('ft-why').style.display='none';
+  document.getElementById('ft-next').style.display='none';
+  const box=document.getElementById('ft-opts'); box.innerHTML=""; box.classList.remove('locked');
+  shuffle(LAB1_CANDIDATES.slice()).forEach(c=>{
+    const b=document.createElement('button'); b.className='qz-opt';
+    b.textContent=`${c.metal} (${c.sym})`;
+    b.onclick=()=>labFlameAnswer(b,c,box);
+    box.appendChild(b);
+  });
+  document.getElementById('ft-score').textContent="Lab 1";
+  document.getElementById('ft-streak').textContent="Sample C";
+}
+function labFlameAnswer(btn,c,box){
+  if(FT.locked)return; FT.locked=true;
+  box.classList.add('locked');
+  const right=c.metal===LAB.unknown.metal;
+  [...box.children].forEach(b=>{
+    if(b.textContent.startsWith(LAB.unknown.metal)) b.classList.add('right');
+    else if(b===btn) b.classList.add('wrong');
+  });
+  const w=document.getElementById('ft-why');
+  if(right){ SFX.click(880,.1,.16); setTimeout(()=>SFX.click(1320,.14,.13),95);
+    w.textContent=`Correct — ${LAB.unknown.metal} burns ${LAB.unknown.word}. Heat lifts its electrons to a higher shell; falling back releases light at a fixed wavelength.`;
+  } else {
+    labSlip(12,"✗ Misidentified the flame colour.");
+    w.textContent=`That was ${LAB.unknown.metal}, which burns ${LAB.unknown.word}. Compare against a known standard next time.`;
+  }
+  w.style.display='block';
+  const nx=document.getElementById('ft-next');
+  nx.style.display='block'; nx.textContent="Take it to the board →";
+  nx.onclick=()=>{
+    FT.on=false; ftBurn=0; ftParts=[];
+    document.getElementById('flametest').classList.remove('on');
+    nx.onclick=ftNext; nx.textContent="Burn another →";
+    LAB.step=5; labHUD(); returnFromPad();
+    toast("Record your finding at the cyan pad by the board.");
+  };
+}
+
+/* ---------------- step 6: the write-up ---------------- */
+function labStepWriteup(){
+  const U=LAB.unknown;
+  labModal("Record your result",
+    "<p><b>Part 1 of 2.</b> Which metal was in Sample C?</p>",
+    shuffle(LAB1_CANDIDATES.slice()).map(c=>({label:`${c.metal} (${c.sym})`,ok:c.metal===U.metal})),
+    (o,b,box)=>{
+      box.classList.add('locked');
+      [...box.children].forEach((c,i)=>{ if(c.textContent.startsWith(U.metal)) c.classList.add('right');
+        else if(c===b) c.classList.add('wrong'); });
+      if(!o.ok) labSlip(12,"✗ Wrong metal recorded.");
+      else SFX.click(820,.09,.14);
+      labFoot("Next",()=>{ labClearNote(); labWriteFormula(); },"primary");
+    });
+}
+function labWriteFormula(){
+  const U=LAB.unknown;
+  const el=BY_SYM[U.sym], cl=BY_SYM["Cl"];
+  const rx=reactionOf(el,cl);
+  const right=rx?rx.formula:U.sym+"Cl";
+  const alts=new Set([right]);
+  [[1,1],[1,2],[2,1],[1,3]].forEach(([i,j])=>{
+    if(alts.size<4){ const f=`${U.sym}${sub(i)}Cl${sub(j)}`; if(f!==right) alts.add(f); }
+  });
+  labModal("Record your result",
+    `<p><b>Part 2 of 2.</b> Write the formula of the compound. ${U.metal} has a charge of `+
+    `${(el.charges[0]>0?"+":"")+el.charges[0]}, chloride is −1.</p>`,
+    shuffle([...alts]).map(f=>({label:f,ok:f===right})),
+    (o,b,box)=>{
+      box.classList.add('locked');
+      [...box.children].forEach(c=>{ if(c.textContent===right) c.classList.add('right');
+        else if(c===b) c.classList.add('wrong'); });
+      if(!o.ok) labSlip(12,"✗ Formula not balanced.");
+      else SFX.click(820,.09,.14);
+      labNote(`${U.metal} is ${(el.charges[0]>0?"+":"")+el.charges[0]} and chloride is −1, so the neutral compound is <b>${right}</b>.`,o.ok?"good":"bad");
+      labFoot("Submit the report",()=>{ labClearNote(); labReport(); },"primary");
+    });
+}
+function labReport(){
+  LAB.finished=true; LAB.active=false; labHUD();
+  const g=labGrade();
+  const rows=[
+    ["Starting marks","100"],
+    ["Deductions",`−${Math.max(0,100-LAB.score)}`],
+    ["Hazard violations",`${LAB.strikes} of ${HAZARD_MAX}`],
+    ["Time","+"+g.timeBonus+"  ("+g.mins.toFixed(1)+" min)"],
+    ["Final",`<b>${g.raw} — ${g.letter}</b>`]
+  ].map(r=>`<div class="rr"><span>${r[0]}</span><span>${r[1]}</span></div>`).join("");
+  labModal("Lab report — "+LAB1.title,
+    `<p>Sample C was <b>${LAB.unknown.metal} chloride</b>.</p><div class="report">${rows}</div>`,
+    [],null,g.raw>=78?"good":g.raw>=50?"":"bad");
+  labFoot("Run it again",()=>{ labModalClose(); labStart(true); });
+  labFoot("Back to free roam",()=>{ labModalClose(); PLAYER.frozen=false; padArmed=false;
+    LAB.active=false; labHUD(); },"primary");
+  completeStation("lab1");
+}
+
+/* ---------------- station dispatch ---------------- */
+function labStation(id){
+  if(!LAB.active){
+    if(id==="brief"){
+      PLAYER.frozen=true;
+      labModal("Lab Mode",
+        "<p>Run a guided experiment across the whole lab. You will look things up at the periodic table, "+
+        "pass a safety check, draw reagents and record a result. Mistakes cost marks. Serious violations end the run.</p>",
+        [],null);
+      labFoot("Start Lab 1",()=>{ labModalClose(); labStart(); },"primary");
+      labFoot("Not now",()=>{ labModalClose(); PLAYER.frozen=false; padArmed=false; });
+      return true;
+    }
+    return false;
+  }
+  const want=labTargetPad();
+  if(id!==want){
+    const st=LAB1.steps[LAB.step];
+    toast("Not yet — "+(st?st.label.toLowerCase():"finish the lab first")+".");
+    PLAYER.frozen=false; padArmed=false;
+    return true;
+  }
+  PLAYER.frozen=true;
+  if(id==="brief")   labStepBrief();
+  else if(id==="table")   labStepTable();
+  else if(id==="safety")  labStepSafety();
+  else if(id==="shelf")   labStepShelf();
+  else if(id==="flame")   labStepFlame();
+  else if(id==="writeup") labStepWriteup();
+  return true;
+}
+
+
 /* ================= BOOT ================= */
 document.getElementById('quiz-btn').onclick=openQuiz;
 document.getElementById('qz-close').onclick=closeQuiz;
@@ -4044,6 +4552,7 @@ document.getElementById('ti-next').onclick=tiNew;
 document.getElementById('bal-close').onclick=closeBalance;
 document.getElementById('bal-check').onclick=balCheck;
 document.getElementById('bal-next').onclick=balNew;
+labHUD();
 document.getElementById('leave-btn').onclick=exitDesk;
 initRoom();
 setTimeout(()=>document.getElementById('room-hint').classList.add('gone'),11000);
